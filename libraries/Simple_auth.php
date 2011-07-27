@@ -38,11 +38,11 @@ class Simple_auth
 	 *
 	 * @param 	string		username
 	 * @param 	string 		password
-	 * @return 	mixed 		FALSE on failure, user_id on success
+	 * @return 	mixed 		FALSE on failure, id on success
 	 */
 	public function log_in($username, $password)
 	{
-		$qry = $this->CI->db->select('user_id, username, email, password, salt')
+		$qry = $this->CI->db->select('id, username, email, password, salt')
 							->where('username', $username)
 							->get('simple_auth_users');
 		
@@ -55,7 +55,7 @@ class Simple_auth
 		if (sha1($password.$qry->row('salt')) == $qry->row('password'))
 		{
 			$data = array(
-				'user_id'		=> $qry->row('user_id'),
+				'id'		=> $qry->row('id'),
 				'username'		=> $qry->row('username'),
 				'email'			=> $qry->row('email'),
 				'salt'			=> $qry->row('salt'),
@@ -63,7 +63,7 @@ class Simple_auth
 			
 			$this->CI->session->set_userdata($data);
 			
-			return $qry->row('user_id');
+			return $qry->row('id');
 		}
 
 		return FALSE;
@@ -105,7 +105,7 @@ class Simple_auth
 	 * @param 	string		username
 	 * @param 	string		password
 	 * @param 	string		email address
-	 * @return 	mixed		user_id
+	 * @return 	mixed		id
 	 */
 	public function create_user($username, $password, $email) 
 	{
@@ -145,7 +145,7 @@ class Simple_auth
 	 */
 	public function is_logged_in()
 	{
-		if ( ! $this->CI->session->userdata('user_id'))
+		if ( ! $this->CI->session->userdata('id'))
 		{
 			return FALSE;
 		}
@@ -165,7 +165,7 @@ class Simple_auth
 	{
 		$password = sha1($password.$this->CI->session->userdata('salt'));
 		
-		$this->CI->db->where('user_id', $this->CI->session->userdata('user_id'))
+		$this->CI->db->where('id', $this->CI->session->userdata('id'))
 					 ->set('password', $password)
 					 ->update('simple_auth_users');
 		
@@ -173,13 +173,13 @@ class Simple_auth
 		$this->_hash_gc();
 	}
 
-	public function change_password_user($password,$user_id,$user_salt)
+	public function change_password_user($password,$id,$user_salt)
 	{
 		//added by pujie
-		echo 'user id ' . $user_id . '<br>';
+		echo 'user id ' . $id . '<br>';
 		echo 'user salt ' . $user_salt. '<br>';
 		$password = sha1($password.$user_salt);
-		$this->CI->db->where('user_id', $user_id)
+		$this->CI->db->where('id', $id)
 					 ->set('password', $password)
 					 ->update('simple_auth_users');
 		
@@ -220,7 +220,7 @@ class Simple_auth
 	public function forgot_password($email_address)
 	{
 		// Does this email address exist in the database?
-		$query = $this->CI->db->select('user_id, username')
+		$query = $this->CI->db->select('id, username')
 							  ->get_where('simple_auth_users',
 									array('email' => $email_address));
 		
@@ -233,7 +233,7 @@ class Simple_auth
 		$hash = $this->_create_salt();
 		
 		$data = array(
-			'user_id'		=> $query->row('user_id'),
+			'id'		=> $query->row('id'),
 			'hash'			=> $hash,
 			'request_time'	=> time()
 		);
@@ -243,7 +243,7 @@ class Simple_auth
 		return array(
 						'hash'		=> $hash,
 						'username'	=> $query->row('username'),
-						'user_id'	=> $query->row('user_id')
+						'id'	=> $query->row('id')
 					);
 	}
 
@@ -280,7 +280,7 @@ class Simple_auth
 			return FALSE;
 		}
 		
-		return $query->row('user_id');
+		return $query->row('id');
 	}
 
 	// --------------------------------------------------------------------------

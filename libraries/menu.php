@@ -1,9 +1,11 @@
 <?php
 class Menu{
+var $obj;
 	public $outputmenu = '';
 	function __construct(){
-		$obj = & get_instance();
-		$obj->load->helper('url');
+		$this->obj = & get_instance();
+		$this->obj->load->helper('url');
+		$this->obj->load->library('lib_table_manager');
 	}
 	function create_menu($param){
 		$menu = '<table>';
@@ -19,6 +21,9 @@ class Menu{
 	}
 	function show_menu(){
 		return $this->outputmenu;
+	}
+	function links($list){
+		$this->obj->lib_table_manager->create_table($list);
 	}
 }
 class MenuHeader{
