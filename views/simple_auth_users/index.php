@@ -1,5 +1,4 @@
 <?php
-	echo $menu;
 	echo $css;
 	echo $title;
 	$this->lib_table_manager->set_heading($heading);

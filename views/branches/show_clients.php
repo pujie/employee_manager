@@ -1,7 +1,9 @@
 <?php
 echo $css;
-echo $menu;
 echo $title;
+echo '<div><strong>Total Rows:' . $total_rows . '</strong></div><p>';
 echo $this->pagination->create_links();
-echo $this->lib_table_manager->create_table($list);
+$this->lib_table_manager->create_table($list);
 echo $this->pagination->create_links();
+$this->lib_table_manager->create_table($navigator);
+$this->menu->links($links);

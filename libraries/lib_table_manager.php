@@ -10,10 +10,15 @@ public $obj;
 		$this->obj->table->set_heading($heading);
 	}
 	function create_table($rows){
-		foreach($rows as $value){
-			$this->obj->table->add_row($value);
+		if(empty($rows)){
+			echo 'There is no data to show';
+		}	
+		else{
+			foreach($rows as $value){
+				$this->obj->table->add_row($value);
+			}
+			echo $this->obj->table->generate();
 		}
-		echo $this->obj->table->generate();
 	}
 	function create_table_template($tbl_id){
 		$tmpl = array (

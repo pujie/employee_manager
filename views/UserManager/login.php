@@ -1,5 +1,4 @@
 <?php
-echo $standard_css;
 echo $title;
 echo form_open('UserManager/login_handler');
 echo '<dl>';

@@ -5,98 +5,119 @@ var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
 		$this->load->model('client');
+		$this->load->model('Simple_auth_user');
 		$this->load->library('lib_table_manager');
 		$this->load->library('session');
 		$this->load->library('menu');
+		$this->load->library('simple_auth');
 		$this->load->library('pagination');
+		$this->load->library('authentication');
 		$this->load->helper('url');
 		$this->load->helper('form');
 		$this->load->model('general');
 		$this->load->model('user_data');
-		$this->data['css']=$this->general->css();
-		$this->data['menu']=$this->general->create_menu();	
-		$this->data['username'] = $this->session->userdata['username'];
-		$this->data['userid'] = $this->session->userdata['id'];
+		$this->data['css']			=	$this->general->css();
+		$this->data['menu']			=	$this->general->create_menu();	
+		if($this->simple_auth->is_logged_in()){
+			$this->data['username'] = 	$this->session->userdata['username'];
+			$this->data['userid'] 	= 	$this->session->userdata['id'];
+		}
+		else{
+			$this->data['username'] = 	'';
+			$this->data['userid'] 	= 	'';
+		}
 		$this->pagination_attributes['base_url'] = base_url() . '/index.php/clients/list_clients/';
 	}
+	
 	function index(){
 		redirect('clients/list_clients');
 	}
 	function list_clients(){
-		$clients 	= new Client;
-		$page		= 0;
-		$per_page	= 10;
-		if($this->uri->segment(3) == null){
-			$page	= 0;
-		}
-			else
-		{	
-			$page	= $this->uri->segment(3);
-		}
-		$clients->get($per_page,$page);
-		$list=array();
-		$this->lib_table_manager->set_heading(array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT'));
-		foreach($clients as $client){
-			array_push($list,array(
-					$client->KODE_PELANGGAN,
-					$client->NAMA_PELANGGAN, 
-					$client->branch->name, 
-					$client->category->KATEGORI, 
-					$client->service->LAYANAN,
-					anchor('clients/edit/' . $client->id,'Edit')
+		if($this->authentication->is_authenticated()){
+			$user=new Simple_auth_user;
+			$user->where('id',$this->session->userdata['id']);
+			$user->get();
+			$branch		= $user->branch->get();
+			$clients	= $branch->client->get();
+			$page		= 0;
+			$per_page	= 10;
+			if($this->uri->segment(3) == null){
+				$page	= 0;
+			}
+				else
+			{	
+				$page	= $this->uri->segment(3);
+			}
+			$clients->get($per_page,$page);
+			$list=array();
+			$this->lib_table_manager->set_heading(array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT'));
+			foreach($clients as $client){
+				array_push($list,array(
+						$client->KODE_PELANGGAN,
+						$client->NAMA_PELANGGAN, 
+						$client->branch->name, 
+						$client->category->KATEGORI, 
+						$client->service->LAYANAN,
+						anchor('clients/edit/' . $client->id,'Edit')
 					)
-			);
-		}
-		$this->data['list']=$list;
-		$this->pagination_attributes['total_rows'] = $clients->count();
-		$this->pagination_attributes['per_page'] = $per_page;
+				);
+			}
+			$this->data['list']=$list;
+			$this->pagination_attributes['total_rows'] = $clients->count();
+			$this->pagination_attributes['per_page'] = $per_page;
 
-		$this->pagination->initialize($this->pagination_attributes);
-		$this->data['modules']=$this->user_data->get_links($this->data['userid']);;
-		$this->data['title']='<h1>Clients</h1>';
-		$this->load->view('index',$this->data);
+			$this->pagination->initialize($this->pagination_attributes);
+			$this->data['navigator']=$this->navigator();
+			$this->data['links']=$this->user_data->get_links($this->data['userid']);;
+			$this->data['title']='<h1>Clients</h1>';
+			$this->load->view('index',$this->data);
+		}
 	}
 	function edit(){
-		$id=$this->uri->segment(3);
-		$client=new Client;
-		$client->where('id',$id);
-		$client->get();
-		$this->data['client']=$client;
-		$this->data['list']=$this->edit_form($client);
-		$this->load->view('edit',$this->data);
+		if($this->authentication->is_authenticated()){
+			$id=$this->uri->segment(3);
+			$client=new Client;
+			$client->where('id',$id);
+			$client->get();
+			$this->data['client']=$client;
+			$this->data['list']=$this->edit_form($client);
+			$this->load->view('edit',$this->data);
+		}
 	}
 	function edit_handler(){
-		$client=new Client;
-		$params=$this->input->post();
-		$client->KODE_PELANGGAN=$params['kode_pelanggan'];
-		$client->NAMA_PELANGGAN=$params['nama_pelanggan'];
-		$client->NAMA_PEMOHON=$params['nama_pemohon'];
-		$client->LAINNYA=$params['lainnya'];
-		$client->JENIS_USAHA=$params['jenis_usaha'];
-		$client->NPWP=$params['npwp'];
-		$client->SIUPP=$params['siupp'];
-		$client->ALAMAT=$params['alamat'];
-		$client->TELP=$params['telp'];
-		$client->FAX=$params['fax'];
-		$client->NO_FB=$params['no_fb'];
-		$client->TGL_FB=$params['tgl_fb'];
-		$client->NO_ID=$params['no_id'];
-		$client->TELP_HP=$params['telp_hp'];
-		$client->HP=$params['hp'];
-		$client->HP2=$params['hp2'];
-		$client->EMAIL=$params['email'];
-		$client->BIAYA_SETUP=$params['biaya_setup'];
-		$client->BIAYA_BERLANGGANAN_BULANAN=$params['biaya_berlangganan_bulanan'];
-		$client->BIAYA_PERANGKAT=$params['biaya_perangkat'];
-		$client->BIAYA_LAINNYA=$params['biaya_lainnya'];
-		$client->KETERANGAN_LAYANAN=$params['keterangan_layanan'];
-		$client->TGL_AKTIVASI=$params['tgl_aktivasi'];
-		$client->PERIODE_LANGGANAN=$params['periode_langganan'];
-		$client->REQUEST_KHUSUS=$params['request_khusus'];
-		$client->ACCOUNT_MANAGER=$params['account_manager'];
-		$client->STATUS=$params['status'];
-		$client->TANGGAL=$params['tanggal'];
-		$client->save();
+		if($this->authentication->is_authenticated()){
+			$client=new Client;
+			$params=$this->input->post();
+			$client->KODE_PELANGGAN=$params['kode_pelanggan'];
+			$client->NAMA_PELANGGAN=$params['nama_pelanggan'];
+			$client->NAMA_PEMOHON=$params['nama_pemohon'];
+			$client->LAINNYA=$params['lainnya'];
+			$client->JENIS_USAHA=$params['jenis_usaha'];
+			$client->NPWP=$params['npwp'];
+			$client->SIUPP=$params['siupp'];
+			$client->ALAMAT=$params['alamat'];
+			$client->TELP=$params['telp'];
+			$client->FAX=$params['fax'];
+			$client->NO_FB=$params['no_fb'];
+			$client->TGL_FB=$params['tgl_fb'];
+			$client->NO_ID=$params['no_id'];
+			$client->TELP_HP=$params['telp_hp'];
+			$client->HP=$params['hp'];
+			$client->HP2=$params['hp2'];
+			$client->EMAIL=$params['email'];
+			$client->BIAYA_SETUP=$params['biaya_setup'];
+			$client->BIAYA_BERLANGGANAN_BULANAN=$params['biaya_berlangganan_bulanan'];
+			$client->BIAYA_PERANGKAT=$params['biaya_perangkat'];
+			$client->BIAYA_LAINNYA=$params['biaya_lainnya'];
+			$client->KETERANGAN_LAYANAN=$params['keterangan_layanan'];
+			$client->TGL_AKTIVASI=$params['tgl_aktivasi'];
+			$client->PERIODE_LANGGANAN=$params['periode_langganan'];
+			$client->REQUEST_KHUSUS=$params['request_khusus'];
+			$client->ACCOUNT_MANAGER=$params['account_manager'];
+			$client->STATUS=$params['status'];
+			$client->TANGGAL=$params['tanggal'];
+			$client->save();
+		}
 	}
 	function edit_form($client){
 		$list=array();
@@ -137,5 +158,10 @@ var $pagination_attributes;
 		array_push($list,array('Branch ID', form_input('branch_id',$client->BRANCH_ID)));
 		array_push($list,array('Service ID', form_input('service_id',$client->SERVICE_ID)));
 		return $list;
+	}
+	function navigator(){
+		$navigator=array();
+		array_push($navigator,array(anchor('UserManager/logout','Logout'),anchor('clients/add','Add')));
+		return $navigator;
 	}
 }

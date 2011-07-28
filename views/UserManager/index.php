@@ -1,10 +1,8 @@
 <?php
-echo $standard_css;
-echo $menu;
+echo $css;
 if($success){
-	// redirect('index');
-	// echo $navigator;
 	echo $title;
+	echo 'Branch : ' . $user_branch->name;
 	echo $this->lib_table_manager->create_table($navigator);
 	echo $this->menu->links($links);
 }
