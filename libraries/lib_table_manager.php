@@ -2,7 +2,6 @@
 class Lib_table_manager{
 public $obj;
 	 function __construct(){
-		// parent::__construct();
 		$this->obj = & get_instance();
 		$this->obj->load->library('table');
 	 }

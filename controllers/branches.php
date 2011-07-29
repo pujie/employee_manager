@@ -1,5 +1,6 @@
 <?php
 class Branches extends CI_Controller{
+var $user;
 var $data = array();
 var $pagination_attributes;
 
@@ -19,75 +20,87 @@ var $pagination_attributes;
 		$this->load->helper('url');
 		$this->data['css']		= $this->general->css();
 		$this->data['menu']		= $this->general->create_menu();
-		$this->data['navigator']=$this->navigator();
 		$this->data['links']	= 	$this->user_data->get_links($this->session->userdata('id'));
+		if($this->simple_auth->is_logged_in()){
+			$this->user	=	new User_data;
+		}
 	}
 	function index(){
 		if($this->authentication->is_authenticated()){
 			$branches = new Branch;
-			$branches->get();
-			$list=array();
-			foreach ($branches as $branch){
-				array_push($list,array(
-					$branch->id,
-					$branch->name,
-					anchor('branches/edit/' . $branch->id,'Edit'),
-					anchor('branches/delete/' . $branch->id,'Delete'),
-					anchor('branches/users/' . $branch->id,'Users'),
-					anchor('branches/show_clients/' . $branch->id,'Clients')
-					));
-			}
-			$this->data['list'] 	= 	$list;
-			$this->data['title']	= 	'<h1>List of Branches</h1>';
-			$this->data['navigator']=	$this->navigator();
+			$this->user->set_title('Branches');
+			$this->user->set_pagetitle('Branches');
+			$this->user->set_navigator(array(array(
+				anchor('branches/add','Add Branches'),
+				anchor('UserManagement/index','Logout'))));
+			$this->data['user']		=	$this->user;
+			$this->data['branches']	=	$branches;
 			$this->load->view('Branches/index',$this->data);
 		}
 	}
 	function add(){
-		$this->load->view('branches/add');
+		$this->user->set_navigator(array(array(
+				anchor('branches/add','Add Branches'),
+				anchor('UserManagement/index','Logout'))));
+		$this->user->set_pagetitle('Add Branch');
+		$this->user->set_title('Add Branch');
+		$this->data['user']=$this->user;
+		$this->load->view('branches/add',$this->data);
 	}
 	function edit(){
-		$branch_id = $this->uri->segment(3);
-		$branches = new Branch;
-		$branches->where('id',$branch_id)->get();
-		$branches->simple_auth_user->get();
-		$this->data['title']='<h1>Edit ' . $branches->name . ' branch</h1>';
-		$this->data['branch']=$branches;
-		$this->load->view('branches/edit',$this->data);
+		if($this->authentication->is_authenticated()){
+			$branch_id = $this->uri->segment(3);
+			$branches = new Branch;
+			$branches->where('id',$branch_id)->get();
+			$branches->simple_auth_user->get();
+			$this->data['title']='<h1>Edit ' . $branches->name . ' branch</h1>';
+			$this->data['branch']=$branches;
+			$this->user->set_title('Edit  ' . $branches->name . ' branch');
+			$this->user->set_pagetitle('Edit  ' . $branches->name . ' branch');
+			$this->user->set_navigator(array(array(
+				anchor('branches','Back to Branches'),
+				anchor('UserManagement/index','Logout'))));
+			$this->data['user']=$this->user;
+			$this->load->view('branches/edit',$this->data);
+		}
 	}
 	function users(){
-		$branch_id = $this->uri->segment(3);
-		$branches = new Branch;
-		$branches->where('id',$branch_id)->get();
-		$branches->simple_auth_user->get();
-		$list = array();
-		foreach($branches->simple_auth_user as $user){
-			array_push($list,array(
-				$user->id,
-				humanize($user->username),
-				anchor('branches/edit_user','Edit User'),
-				anchor('branches/delete_user','Delete User')
-				));
+		if($this->authentication->is_authenticated()){
+			$branch_id = $this->uri->segment(3);
+			$branches = new Branch;
+			$branches->where('id',$branch_id)->get();
+			$this->data['branch_id']	=	$branch_id;
+			$this->user->set_navigator(array(array(
+				anchor('branches/add_user/' . $branch_id,'Add User'),
+				anchor('branches','Back to Branches'),
+				anchor('UserManager/logout','Logout'))));
+			$this->user->set_title('Branch Users');
+			$this->user->set_pagetitle('Branch Users');
+			$this->data['branch']	=	$branches;
+			$this->data['user']		=	$this->user;
+			
+			$this->load->view('branches/users',$this->data);
 		}
-		$this->data['title']='<h1>Users in ' . humanize($branches->name) . ' Branch</h1>';
-		$this->data['list'] = $list;
-		$this->data['branch_id']=$branch_id;
-		$navigator=array();
-		array_push($navigator,array(anchor('branches/add_user/' . $branch_id,'Add User'),anchor('branches','Back to Branches'),anchor('UserManager/logout','Logout')));
-		$this->data['navigator']=$navigator;//I override to add add user
-		$this->load->view('branches/users',$this->data);
 	}
 	function add_user(){
-		$users = new Simple_auth_user;
-		$users->get();
-		$list = array();
-		foreach($users as $user){
-			array_push($list,array($user->id=>$user->username)) ;
+		if($this->authentication->is_authenticated()){
+			$users = new Simple_auth_user;
+			$users->get();
+			$list = array();
+			foreach($users as $user){
+				array_push($list,array($user->id=>$user->username)) ;
+			}
+			$this->data['users']=$list;
+			$this->data['branch_id']=$this->uri->segment(3);
+			$this->user->set_title('Add User');
+			$this->user->set_pagetitle('Add User');
+			$this->user->set_navigator(array(array(
+				anchor('branches/users/' . $this->data['branch_id'],'User'),
+				anchor('branches','Back to Branches'),
+				anchor('UserManager/logout','Logout'))));
+			$this->data['user']=$this->user;
+			$this->load->view('branches/add_user',$this->data);
 		}
-		$this->data['users']=$list;
-		$this->data['branch_id']=$this->uri->segment(3);
-		$this->data['title']='<h1>Add Branch\'s User</h1>';
-		$this->load->view('branches/add_user',$this->data);
 	}
 	function add_user_handler(){
 		$params = $this->input->post();
@@ -104,12 +117,10 @@ var $pagination_attributes;
 		redirect('branches/edit/' . $params['branch_id'],'refresh');
 	}
 	function show_clients(){
-		if($this->authentication->is_authenticated($this->session->userdata['id'])){
+		if($this->authentication->is_authenticated()){
 			$id=$this->uri->segment(3);
 			$per_page	=	10;
 			$page=$this->uri->segment(4);
-
-			$this->pagination_attributes['base_url'] = base_url() . '/index.php/branches/show_clients/' . $id;
 			$branches = new Branch;
 			$branches->where('id',$id);
 			$branches->get();
@@ -117,25 +128,18 @@ var $pagination_attributes;
 			if($page == null){
 				$page	=	0;
 			}
-			$this->pagination_attributes['total_rows'] 	= $branches->client->count();
-			$this->pagination_attributes['per_page'] 	= $per_page;
-			
-			$branches->client->get($per_page,$page);
-			$this->pagination->initialize($this->pagination_attributes);
+			$branches->set_client_list($id);
 
-			$list=array();
-			foreach($branches->client as $client){
-				array_push($list,array($client->id, $client->NAMA_PELANGGAN));
-			}
-			$this->data['total_rows']	=	$branches->client->count();
-			$this->data['list']			=	$list;
-			$this->data['title']		=	'<h1>' . $branches->name . '\'s Clients</h1>';
+			$this->data['branch_client']	=	$branches;
+
+			$this->user->set_title(humanize($this->user->get_user()) . ' \'sClients');
+			$this->user->set_pagetitle(humanize($this->user->get_user()) . ' \'s Clients');
+			$this->user->set_navigator(array(array(
+				anchor('branches/users/' . $id,'User'),
+				anchor('branches','Back to Branches'),
+				anchor('UserManager/logout','Logout'))));
+			$this->data['user']			=	$this->user;
 			$this->load->view('branches/show_clients',$this->data);
 		}
-	}
-	function  navigator(){
-		$list=array();
-		array_push($list,array(anchor('branches/add','Add Branch'),anchor('branches','Back to Branches'),anchor('UserManager/logout','Logout ' . humanize($this->session->userdata['username']))));
-		return $list;
 	}
 }

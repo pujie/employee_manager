@@ -1,13 +1,9 @@
 <?php
 echo $css;
-echo $title;
-if(empty($list)){
-	echo 'no data is present ..<br>';
-}
-else
-{
+echo $user->get_title();
+echo $user->get_pagetitle();
 echo $this->lib_table_manager->set_heading(array('Id','Name','Edit','Delete'));
-echo $this->lib_table_manager->create_table($list);
-}
-echo $this->lib_table_manager->create_table($navigator);
-$this->menu->links($links);
+echo 'Number of users: ' . $branch->get_user_count();
+echo $this->lib_table_manager->create_table($branch->get_user_list());
+$this->lib_table_manager->create_table($user->get_navigator());
+$this->menu->links($user->get_links());

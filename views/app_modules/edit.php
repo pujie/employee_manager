@@ -1,10 +1,12 @@
 <?php
 echo $this->config->item('css');
-echo $menu;
-echo $title;
+echo $user->get_title();
+echo $user->get_user();
 echo form_open('app_modules/edit_handler');
-echo 'Id' . form_hidden('id',$module->id);
-echo 'Name' . form_input('name',$module->name);
-echo 'URL' . form_input('url',$module->url);
+echo form_hidden('id',$module->id) . '<br>';
+echo 'Name' . form_input('name',$module->name) . '<br>';
+echo 'URL' . form_input('url',$module->url) . '<br>';
 echo form_submit('save','Save');
 echo form_close();
+$this->lib_table_manager->create_table($user->get_navigator());
+$this->menu->links($user->get_links());

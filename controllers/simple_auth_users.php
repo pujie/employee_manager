@@ -1,5 +1,6 @@
 <?php
 class Simple_auth_users extends CI_Controller{
+var $user;
 var $data = array();
 var $current_url;
 	function __construct(){
@@ -20,26 +21,18 @@ var $current_url;
 		$this->data['css']			=	$this->general->css();
 		$this->data['links']	= $this->user_data->get_links($this->session->userdata('id'));
 		$this->data['navigator']=$this->navigator();
+		if($this->simple_auth->is_logged_in()){
+			$this->user=new User_data;
+		}
 	}
 	function index(){
 		if($this->authentication->is_authenticated()){
 			$users = new Simple_auth_user;
-			$users->get();
-			$heading = array('Name','Email','Edit','Delete','Modules','Branches');
-			$this->data['heading'] = $heading;
-			$list = array();
-			foreach($users as $user){
-				array_push($list,array(
-					$user->username,
-					$user->email,
-					anchor('simple_auth_users/edit/' . $user->id,'Edit'),
-					anchor('simple_auth_users/delete/' . $user->id,'Delete'),
-					anchor('simple_auth_users/show_modules/' . $user->id,'Modules'),
-					anchor('simple_auth_users/show_branches/' . $user->id,'Branches')));
-			}
-			$this->data['list'] 	= $list;
-			$this->data['title']	= '<h1>User List</h1>';
-			$this->current_url =  $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '//' . $_SERVER['REQUEST_URI'];
+			$heading = array('Id', 'Name','Email','Edit','Delete','Modules','Branches');
+			$this->data['heading'] 	=	$heading;
+			$this->data['title']	=	'<h1>User List</h1>';
+			$this->current_url 		= 	$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '//' . $_SERVER['REQUEST_URI'];
+			$this->data['users']	=	$users;
 			$this->load->view('Simple_auth_users/index',$this->data);
 		}
 	}
@@ -108,21 +101,16 @@ var $current_url;
 	}
 	function show_modules(){
 		if($this->authentication->is_authenticated()){
-			$user = new Simple_auth_user;
+			$module_user = new Simple_auth_user;
 			$id = $this->uri->segment(3);
-			$user->where('id',$id);
-			$user->get();
-			$this->data['user'] = $user->username;
-			$list = array();
-			foreach($user->module as $module){
-				array_push($list,array($module->id,$module->name));
-			}
-			$this->data['last_url'] = 'simple_auth_users';
-			$this->data['list'] = $list;
-			$navigator=array();
-			array_push($navigator,array(anchor('Simple_auth_users/add','Add User'),anchor('simple_auth_users/add_module/' . $id,'Add Module'),anchor('UserManager/logout','Logout')));
-			$this->data['navigator']=$navigator;//override ..
-			$this->data['title'] = '<h1>' . humanize($user->username) . '\'s modules: </h1>';
+			$module_user->where('id',$id);
+			$module_user->get();
+			$this->user->set_navigator(array(array(
+				anchor('Simple_auth_users/add','Add User'),
+				anchor('UserManager/logout','Logout'))));
+			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
+			$this->data['module_user']		=	$module_user;
+			$this->data['user']				=	$this->user;
 			$this->load->view('simple_auth_users/show_modules',$this->data);
 		}
 	}	
@@ -157,18 +145,20 @@ var $current_url;
 	function show_branches(){
 		if($this->authentication->is_authenticated()){
 			$id = $this->uri->segment(3);
-			$user = new Simple_auth_user;
-			$user->where('id',$id);
-			$user->get();
+			$branch_user = new Simple_auth_user;
+			$branch_user->where('id',$id);
+			$branch_user->get();
 			$list=array();
-			foreach($user->branch as $branch){
+			foreach($branch_user->branch as $branch){
 				array_push($list,array($branch->id, $branch->name));
 			}
-			$this->data['title']='<h1>'  . humanize($user->username) . '\'s Branch</h1>';
-			$navigator=array();
-			array_push($navigator,array(anchor('Simple_auth_users/add','Add User'),anchor('simple_auth_users/add_branch','Add Branch'),anchor('UserManager/logout','Logout')));
-			$this->data['navigator']=$navigator;//override ..
-			$this->data['list']	= $list;
+			$this->user->set_title(humanize($branch_user->username) . '\'s Branch');
+		
+			$this->user->set_navigator(array(array(
+				anchor('Simple_auth_users/add','Add User'),
+				anchor('UserManager/logout','Logout'))));
+			$this->data['branch_user']	=	$branch_user;
+			$this->data['user']			= 	$this->user;
 			$this->load->view('simple_auth_users/branches',$this->data);
 		}
 	}
