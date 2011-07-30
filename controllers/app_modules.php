@@ -28,7 +28,7 @@ var $data;
 				array_push($list,array( $module->id,$module->name,anchor('app_modules/edit/' . $module->id,'Edit'),anchor('app_modules/uninstall','Uninstall') ));
 			}
 			$this->data['list']=$list;
-			$this->user->set_navigator(array(array(anchor('app_modules/add','Add Modules'),anchor('UserManager/logout','Logout'))));
+			$this->user->set_navigator(array(array(anchor('app_modules/add','Add Modules'),anchor('front_page/logout','Logout'))));
 			$this->user->set_title('Modules');
 			$this->data['user']=$this->user;
 			$this->load->view('app_modules/index',$this->data);

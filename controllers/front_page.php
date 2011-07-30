@@ -1,5 +1,6 @@
 <?php
-class UserManager extends CI_Controller{
+class Front_page extends CI_Controller{
+	var $user_data;
 	var $data = array();
 	function __construct(){
 		parent::__construct();
@@ -12,7 +13,7 @@ class UserManager extends CI_Controller{
 		$this->load->model('general');
 
 		if($this->simple_auth->is_logged_in()){
-			$this->load->library('user_data');
+			$this->load->model('user_data');
 			$this->data['session_id']	=	$this->session->userdata('session_id');
 			$this->data['ip_address']	=	$this->session->userdata('ip_address');
 			$this->data['user_agent']	=	$this->session->userdata('user_agent');
@@ -28,13 +29,13 @@ class UserManager extends CI_Controller{
 		}
 	function index(){
 		if($this->authentication->is_authenticated()){
-			$this->load->view('UserManager/login',$this->data);
+			$this->load->view('front_page/login');
 		}
 	}
 	function create_user(){
 		if($this->authentication->is_authenticated()){
 			$this->data['title']='<h1>Create User</h1>';
-			$this->load->view('UserManager/create_user',$this->data);
+			$this->load->view('front_page/create_user',$this->data);
 		}
 	}
 	function create_user_handler(){
@@ -48,7 +49,7 @@ class UserManager extends CI_Controller{
 		if($this->authentication->is_authenticated()){
 			$this->data['title'] 		= '<h1>Change Password</h1>';
 			$this->data['login_status'] = 'You are logged in';
-			$this->load->view('UserManager/change_password',$this->data);
+			$this->load->view('front_page/change_password',$this->data);
 		}
 	}
 	function change_password_handler(){
@@ -64,22 +65,23 @@ class UserManager extends CI_Controller{
 	}
 	function login(){
 		$this->data['title']='<h1>Login </h1>';
-		$this->load->view('UserManager/login',$this->data);
+		$this->load->view('front_page/login',$this->data);
 	}
 	function login_handler(){
-		$this->data['logout_link']		=	anchor('UserManager/logout','Logout');
+		$this->data['logout_link']		=	anchor('front_page/logout','Logout');
 		$username						=	$this->input->post('name');
 		$password						=	$this->input->post('password');
 		if($this->simple_auth->log_in($username,$password)){
-			$user	= new Simple_auth_user;
+			$this->user_data			=	new User_data;
+			$user						=	new Simple_auth_user;
 			$user->where('id',$this->session->userdata['id']);
 			$user->get();
 			$this->data['user_branch']	= 	$user->branch;
 			$this->data['success']		=	TRUE;
-			$this->data['navigator']	=	$this->navigator();
-			$this->data['title']		=	'<h1>Hello ' . humanize($username) . '</h1>';
-			$this->data['links']		= 	$this->user_data->get_links($this->session->userdata('id'));
-			$this->load->view('UserManager/index',$this->data);
+			$this->user_data->set_title('Welcome, ' . humanize($this->user_data->get_user()));
+			$this->user_data->set_navigator(array(array(anchor('front_page/logout','Logout'))));
+			$this->data['user']			=	$this->user_data;
+			$this->load->view('front_page/index',$this->data);
 		}
 		else{
 			$this->data['success']		=	FALSE;
@@ -87,7 +89,7 @@ class UserManager extends CI_Controller{
 		}
 	}
 	function logout(){
-		$this->simple_auth->log_out('UserManager/index');
+		$this->simple_auth->log_out('front_page/index');
 		echo 'Good bye';
 	}
 	function destroy_session(){
@@ -109,7 +111,7 @@ class UserManager extends CI_Controller{
 	}
 	function navigator(){
 		$list=array();
-		array_push($list,array(anchor('UserManager/logout','Logout')));
+		array_push($list,array(anchor('front_page/logout','Logout')));
 		return $list;
 	}
 }

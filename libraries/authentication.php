@@ -6,12 +6,12 @@ var $obj;
 	}
 	function is_authenticated(){
 		if($this->obj->simple_auth->is_logged_in()){
-			// $this->obj->load->view('UserManager/login',$this->data);
+			// $this->obj->load->view('front_page/login',$this->data);
 			return true;
 		}
 		else
 		{
-			$this->obj->load->view('UserManager/not_loged_in');
+			$this->obj->load->view('front_page/not_loged_in');
 			// redirect('UserManager');
 			return false;
 		}

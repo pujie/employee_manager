@@ -13,15 +13,8 @@ var $current_url;
 		$this->load->library('authentication');
 		$this->load->model('simple_auth_user');
 		$this->load->model('general');
-		$this->load->model('user_data');
-		$this->data['username']		=	$this->session->userdata('username');
-		$this->data['password']		=	$this->session->userdata('password');
-		$this->data['email']		=	$this->session->userdata('email');
-		$this->data['menu']			=	$this->general->create_menu();
-		$this->data['css']			=	$this->general->css();
-		$this->data['links']	= $this->user_data->get_links($this->session->userdata('id'));
-		$this->data['navigator']=$this->navigator();
 		if($this->simple_auth->is_logged_in()){
+			$this->load->model('user_data');
 			$this->user=new User_data;
 		}
 	}
@@ -33,6 +26,10 @@ var $current_url;
 			$this->data['title']	=	'<h1>User List</h1>';
 			$this->current_url 		= 	$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '//' . $_SERVER['REQUEST_URI'];
 			$this->data['users']	=	$users;
+			$this->user->set_pagetitle('User List');
+			$this->user->set_title('User List');
+			$this->user->set_navigator(array(array(anchor('Simple_auth_users/add','Add User'),anchor('front_page/logout','Logout'))));
+			$this->data['user']=	$this->user;
 			$this->load->view('Simple_auth_users/index',$this->data);
 		}
 	}
@@ -106,7 +103,7 @@ var $current_url;
 			$module_user->where('id',$id);
 			$module_user->get();
 			$this->user->set_navigator(array(array(
-				anchor('Simple_auth_users/add','Add User'),
+				anchor('Simple_auth_users','Back to Users'),
 				anchor('UserManager/logout','Logout'))));
 			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
 			$this->data['module_user']		=	$module_user;
@@ -152,19 +149,15 @@ var $current_url;
 			foreach($branch_user->branch as $branch){
 				array_push($list,array($branch->id, $branch->name));
 			}
+			$this->user->set_pagetitle(humanize($branch_user->username) . '\'s Branch');
 			$this->user->set_title(humanize($branch_user->username) . '\'s Branch');
 		
 			$this->user->set_navigator(array(array(
-				anchor('Simple_auth_users/add','Add User'),
+				anchor('Simple_auth_users','Back to Users'),
 				anchor('UserManager/logout','Logout'))));
 			$this->data['branch_user']	=	$branch_user;
 			$this->data['user']			= 	$this->user;
 			$this->load->view('simple_auth_users/branches',$this->data);
 		}
-	}
-	function navigator(){
-		$list=array();
-		array_push($list,array(anchor('Simple_auth_users/add','Add User'),anchor('UserManager/logout','Logout')));
-		return $list;
 	}
 }

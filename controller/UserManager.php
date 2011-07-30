@@ -3,35 +3,28 @@ class UserManager extends CI_Controller{
 	var $data = array();
 	function __construct(){
 		parent::__construct();
-		$this->load->library('session');
-		$this->load->library('simple_auth');
 		$this->load->helper('url');
 		$this->load->helper('form');
-		$this->load->library('menu');
 		$this->load->model('general');
-
-		$session_id 				= $this->session->userdata('session_id');
-		$ip_address 				= $this->session->userdata('ip_address');
-		$user_agent 				= $this->session->userdata('user_agent');
-		$user_data					= $this->session->userdata('user_data');
-		$last_activity 				= $this->session->userdata('last_activity');
-
-		$this->data['menu'] 		= 	$this->general->create_menu();
-		$this->data['standard_css'] = 	$this->general->css();
-		$this->data['session_id']	=	$session_id;
-		$this->data['ip_address']	=	$ip_address;
-		$this->data['user_agent']	=	$user_agent;
-		$this->data['last_activity']=	$last_activity;
-		$this->data['user_data']	=	$user_data;
-		$this->data['username']		=	$this->session->userdata('username');
-		$this->data['email']		=	$this->session->userdata('email');
-			// echo $this->session->userdata('ip_address');
-			// $new_custom_session_data=array(
-				// 'username'=>'jojon',
-				// 'email'=>'jojon@padi.net.id'
-				// );
-			// $this->session->set_userdata($new_custom_session_data);
+		$this->load->library('menu');
+		$this->load->library('session');
+		$this->load->library('simple_auth');
+		if($this->simple_auth->is_logged_in()){
+			$this->load->library('user_data');
+			$session_id 				= 	$this->session->userdata('session_id');
+			$ip_address 				= 	$this->session->userdata('ip_address');
+			$user_agent 				= 	$this->session->userdata('user_agent');
+			$user_data					= 	$this->session->userdata('user_data');
+			$last_activity 				= 	$this->session->userdata('last_activity');
+			$this->data['session_id']	=	$session_id;
+			$this->data['ip_address']	=	$ip_address;
+			$this->data['user_agent']	=	$user_agent;
+			$this->data['last_activity']=	$last_activity;
+			$this->data['user_data']	=	$user_data;
+			$this->data['username']		=	$this->session->userdata('username');
+			$this->data['email']		=	$this->session->userdata('email');
 		}
+	}
 	function index(){
 		if($this->simple_auth->is_logged_in()){
 			$this->load->view('UserManager/login',$this->data);
@@ -42,24 +35,13 @@ class UserManager extends CI_Controller{
 		}
 	}
 	function create_user(){
-		// if($this->simple_auth->is_logged_in()){
-			$this->data['title']='<h1>Create User</h1>';
-			$this->load->view('UserManager/create_user',$this->data);
-		// }
-		// else
-		// {
-			// echo 'You are not authenticated';
-		// }
+		$this->data['title']='<h1>Create User</h1>';
+		$this->load->view('UserManager/create_user',$this->data);
 	}
 	function create_user_handler(){
-		// if($this->simple_auth->is_logged_in()){
 			$params = $this->input->post();
 			$status = $this->simple_auth->create_user($params['username'],$params['userpassword'],$params['email']);
 			echo $status;
-		// }
-		// else{
-			// echo 'You are not authenticated';
-		// }
 	}
 	function change_password(){
 		if($this->simple_auth->is_logged_in()){

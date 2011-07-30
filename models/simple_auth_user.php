@@ -1,5 +1,6 @@
 <?php
 class Simple_auth_user extends DataMapper{
+var $navigator;
 	var $has_one = array('user');
 	var $has_many = array('module','branch');
 	function __construct(){
