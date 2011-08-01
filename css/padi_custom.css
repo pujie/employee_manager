@@ -1,0 +1,36 @@
+.tableless_label{
+float: left;
+width: 220px;
+font-weight: bold;
+}
+
+.tableless_input, .tableless_textarea{
+width: 180px;
+margin-bottom: 5px;
+}
+
+.tableless_textarea{
+width: 250px;
+height: 150px;
+}
+
+.boxes{
+width: 1em;
+}
+
+#submitbutton{
+margin-left: 120px;
+margin-top: 5px;
+width: 90px;
+}
+
+.tableless_br{
+clear: left;
+}
+.wide .tableless_input{
+	width: 300px;
+}.semi_wide .tableless_input{
+	width: 600px;
+}.extra_wide .tableless_input{
+	width: 900px;
+}
