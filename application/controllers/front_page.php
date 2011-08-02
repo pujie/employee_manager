@@ -4,10 +4,7 @@ class Front_page extends CI_Controller{
 	var $data = array();
 	function __construct(){
 		parent::__construct();
-		$this->load->library('session');
 		$this->load->library('simple_auth');
-		$this->load->helper('url');
-		$this->load->helper('form');
 		$this->load->library('menu');
 		$this->load->library('authentication');
 		$this->load->model('general');

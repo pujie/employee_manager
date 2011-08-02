@@ -27,7 +27,7 @@ var $data;
 			// $this->user_data->set_links(array(array('x','y')));
 			$this->user_data->set_navigator(array(array(
 				anchor('Simple_auth_users','Back to Users'),
-				anchor('UserManager/logout','Logout'))));
+				anchor('front_page/logout','Logout'))));
 			$this->data['user_data']=$this->data;
 			$this->load->view('index',$this->data);
 		}
