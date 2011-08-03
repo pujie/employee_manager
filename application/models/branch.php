@@ -32,7 +32,7 @@ var $pagination_attributes;
 		$this->get();
 		$this->simple_auth_user->get();
 		foreach($this->simple_auth_user as $user){
-			array_push($list,array($user->id,humanize($user->username),anchor('branches/edit','Edit'),anchor('branches/delete','Delete')));
+			array_push($list,array($user->id,humanize($user->username),anchor('branches/delete','Delete')));
 		}
 		return $list;
 	}

@@ -3,21 +3,19 @@ class Branches extends CI_Controller{
 var $user;
 var $data = array();
 var $pagination_attributes;
-
+var $authentication;
 	function __construct(){
 		parent::__construct();
 		$this->load->model('branch');
 		$this->load->model('general');
-		$this->load->model('user_data');
-		$this->load->library('pagination');
-		$this->load->library('authentication');
-		$this->load->library('lib_table_manager');
-		$this->load->library('menu');
+		// $this->load->librar
+		$this->authentication=new Authentication;
 		$this->data['css']		= $this->general->css();
 		$this->data['menu']		= $this->general->create_menu();
-		$this->data['links']	= 	$this->user_data->get_links($this->session->userdata('id'));
 		if($this->simple_auth->is_logged_in()){
+			$this->load->model('user_data');
 			$this->user	=	new User_data;
+			$this->data['links']	= 	$this->user_data->get_links($this->session->userdata('id'));
 		}
 	}
 	function index(){
