@@ -2,7 +2,7 @@
 class Clients extends CI_Controller{
 var $data;
 var $authentication;
-var $head;
+var $head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 var $body;
 var $pagination_attributes;
 	function __construct(){
@@ -35,25 +35,24 @@ var $pagination_attributes;
 			$user->get();
 			$branch					= 	$user->branch->get();
 			if($this->uri->segment(4)<>null){
-			$clients				=	$branch->client->like('NAMA_PELANGGAN',$this->uri->segment(4));
-			$pagination_attribute['per_page']	=10;
+				$clients				=	$branch->client->like('NAMA_PELANGGAN',$this->uri->segment(4));
+				$pagination_attribute['per_page']	=	10;
 			}
 			else{
-			$clients				= 	$branch->client->get();
-			$clients->set_pagination_attributes(10,$clients->count(),base_url() . '/index.php/clients/list_clients/');
-			$pagination_attribute	=	$clients->get_pagination_attributes();
+				$clients				= 	$branch->client->get();
+				$clients->set_pagination_attributes(10,$clients->count(),base_url() . '/index.php/clients/list_clients/');
+				$pagination_attribute	=	$clients->get_pagination_attributes();
 			}
 			$page					= 	0;
 			$per_page				= 	$pagination_attribute['per_page'];
 			if($this->uri->segment(3) == null){
-				$page	= 0;
+				$page	=	0;
 			}
 				else
 			{	
 				$page	= $this->uri->segment(3);
 			}
 			$clients->get($per_page,$page);
-			$header=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 			$body=array();
 			foreach($clients as $client){
 				array_push($body,array(
@@ -62,17 +61,20 @@ var $pagination_attributes;
 						$client->branch->name, 
 						$client->category->KATEGORI, 
 						$client->service->LAYANAN,
-						anchor('clients/edit/' . $client->id,'Edit')
+						anchor('clients/edit/' . $client->id,'Edit','class="table_button"')
 					)
 				);
 			}
-			$this->data['head']=$header;
+			$this->data['head']=$this->head;
 			$this->data['body']=$body;
-			$this->head=$header;
-			$this->body=$body;
 			$this->pagination->initialize($pagination_attribute);
 			$this->user_data->set_title('Clients');
-			$this->user_data->set_navigator(array(array(anchor('clients/add','Add Client'),anchor('front_page/logout','Logout'))));
+			$this->user_data->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('clients/add','Add Client','class="button"'),
+				anchor('clients/get_excel','Get Excel','class="button"'),
+				anchor('clients/import','Import','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->load->view('index',$this->data);
 		}
 	}
@@ -101,7 +103,7 @@ var $pagination_attributes;
 			$user=new User_data;
 			$user->set_pagetitle('Edit Client');
 			$user->set_title('Edit Client');
-			$user->set_navigator(array(array(anchor('Client/list_clients','Back to Clients'),anchor('front_page/logout','Logout'))));
+			$user->set_navigator(array(array(anchor('Client/list_clients','Back to Clients','class="button"'),anchor('clients/get_excel','Get Excel','class="button"'),anchor('front_page/logout','Logout','class="button"'))));
 			$client->where('id',$id);
 			$client->get();
 			$this->data['client']=$client;
@@ -135,6 +137,8 @@ var $pagination_attributes;
 		$this->output->set_header('Content-type: application/ms-excel');
 		$this->output->set_header('Content-Disposition: attachment; filename='.$filename);
 		echo $this->lib_table->set_table('clients',$this->head,$this->body);
-		// echo '<table><tr><td>satyu</td><td>duwya</td><td>tigya</td></tr></table>';
+		// foreach($this->head as $head ){
+		// echo $head;
+		// }
 	}
 }

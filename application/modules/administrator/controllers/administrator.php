@@ -19,7 +19,12 @@ var $user;
 	}
 	function index(){
 		$this->user->set_title('Administrator');
-		$this->user->set_navigator(array(array(anchor('app_modules','Modules'),anchor('simple_auth_users/index','Users'),anchor('branches','Branches'))));
+		$this->user->set_navigator(array(array(
+			anchor('/','Home','class="button"'),
+			anchor('app_modules','Modules','class="button"'),
+			anchor('simple_auth_users/index','Users','class="button"'),
+			anchor('branches','Branches','class="button"'),
+			anchor('front_page/logout','Logout','class="button"'))));
 
 		$this->data['user']	=	$this->user;
 		$this->load->view('index',$this->data);

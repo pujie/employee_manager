@@ -1,4 +1,5 @@
 <link type="text/css" href="<?php echo base_url();?>css/smoothness/jquery-ui-1.8.14.custom.css" rel="stylesheet" />	
+<link type="text/css" href="<?php echo base_url();?>css/padi_custom.css" rel="stylesheet" />	
 <link type="text/css" href="<?php echo base_url();?>css/demo_table.css" rel="stylesheet" />	
 <link type="text/css" href="<?php echo base_url();?>css/demo_table_jui.css" rel="stylesheet" />	
 <link type="text/css" href="<?php echo base_url();?>css/demo_page.css" rel="stylesheet" />	

@@ -13,6 +13,8 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$("#tabs").tabs();
+				$(".button").button();
+				$('.table_button').button();
 			})
 		</script>
     </head>

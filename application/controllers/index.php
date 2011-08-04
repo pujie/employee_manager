@@ -4,11 +4,8 @@ var $user_data;
 var $data;
 	function __construct(){
 		parent::__construct();
-		$this->load->library('simple_auth');
-		$this->load->library('session');
 		$this->load->library('menu');
 		$this->load->model('general');
-		$this->load->model('simple_auth_user');
 		$this->config->load('padi_config');
 		$this->load->model('user_data');
 		$this->load->library('lib_table_manager');
@@ -19,15 +16,17 @@ var $data;
 			$this->user_data=new User_data;		
 			$user->where('id',$this->session->userdata('id'));
 			$user->get();
-			$this->data['menu']=$this->general->create_menu();
-			$this->data['css']=$this->general->css();
-			$this->data['title']='<h1>Welcome to PadiNet ...' . humanize($this->session->userdata('username')) . '</h1>';
-			$this->data['branch']=$user->branch->name;
-			$this->data['modules']=$user->module->name;
-			// $this->user_data->set_links(array(array('x','y')));
-			$this->user_data->set_navigator(array(array(
-				anchor('Simple_auth_users','Back to Users'),
-				anchor('front_page/logout','Logout'))));
+			$this->data['menu']		=	$this->general->create_menu();
+			$this->data['css']		=	$this->general->css();
+			$this->data['title']	=	'<h1>Welcome to PadiNet ...' . humanize($this->session->userdata('username')) . '</h1>';
+			$this->data['branch']	=	$user->branch->name;
+			$this->data['modules']	=	$user->module->name;
+			$links=$this->user_data->get_links();
+			$navigator=array(
+				anchor('/','Home','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'));
+			$navigator=array_merge(array(anchor('/','Home','class="button"')),$links[0],array(anchor('front_page/logout','Logout','class="button"')));
+			$this->user_data->set_navigator(array($navigator));
 			$this->data['user_data']=$this->data;
 			$this->load->view('index',$this->data);
 		}

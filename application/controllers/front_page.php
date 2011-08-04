@@ -69,16 +69,17 @@ class Front_page extends CI_Controller{
 		$username						=	$this->input->post('name');
 		$password						=	$this->input->post('password');
 		if($this->simple_auth->log_in($username,$password)){
-			$this->user_data			=	new User_data;
-			$user						=	new Simple_auth_user;
-			$user->where('id',$this->session->userdata['id']);
-			$user->get();
-			$this->data['user_branch']	= 	$user->branch;
-			$this->data['success']		=	TRUE;
-			$this->user_data->set_title('Welcome, ' . humanize($this->user_data->get_user()));
-			$this->user_data->set_navigator(array(array(anchor('front_page/logout','Logout'))));
-			$this->data['user']			=	$this->user_data;
-			$this->load->view('front_page/index',$this->data);
+			// $this->user_data			=	new User_data;
+			// $user						=	new Simple_auth_user;
+			// $user->where('id',$this->session->userdata['id']);
+			// $user->get();
+			// $this->data['user_branch']	= 	$user->branch;
+			// $this->data['success']		=	TRUE;
+			// $this->user_data->set_title('Welcome, ' . humanize($this->user_data->get_user()));
+			// $this->user_data->set_navigator(array(array(anchor('front_page/logout','Logout'))));
+			// $this->data['user']			=	$this->user_data;
+			// $this->load->view('front_page/index',$this->data);
+			redirect('/');
 		}
 		else{
 			$this->data['success']		=	FALSE;

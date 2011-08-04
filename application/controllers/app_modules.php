@@ -7,12 +7,9 @@ var $data;
 		$this->load->model('module');
 		$this->load->model('general');
 		$this->load->model('user_data');
-		$this->load->library('authentication');
-		$this->load->library('simple_auth');
-		$this->load->library('session');
+		$this->load->library('lib_table');
 		$this->load->library('lib_table_manager');
 		$this->load->library('menu');
-		$this->load->helper('form');
 		$this->config->load('padi_config');
 		$this->data['menu']=$this->general->create_menu();
 		if($this->simple_auth->is_logged_in($this->session->userdata['id'])){
@@ -25,10 +22,16 @@ var $data;
 			$modules->get();
 			$list=array();
 			foreach($modules as $module){
-				array_push($list,array( $module->id,$module->name,anchor('app_modules/edit/' . $module->id,'Edit'),anchor('app_modules/uninstall','Uninstall') ));
+				array_push($list,array( 
+					$module->id,$module->name,
+					anchor('app_modules/edit/' . $module->id,'Edit','class="table_button"'),
+					anchor('app_modules/uninstall','Uninstall','class="table_button"') ));
 			}
 			$this->data['list']=$list;
-			$this->user->set_navigator(array(array(anchor('app_modules/add','Add Modules'),anchor('front_page/logout','Logout'))));
+			$this->user->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('app_modules/add','Add Modules','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->user->set_title('Modules');
 			$this->data['user']=$this->user;
 			$this->load->view('app_modules/index',$this->data);
@@ -42,8 +45,9 @@ var $data;
 			$module->where('id',$id);
 			$this->data['module'] = $module->get();
 			$this->user->set_navigator(array(array(
-				anchor('app_modules','Back to Modules'),
-				anchor('UserManager/logout','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('app_modules','Back to Modules','class="button"'),
+				anchor('UserManager/logout','Logout','class="button"'))));
 			$this->data['user']=$this->user;
 			$this->load->view('app_modules/edit',$this->data);
 		}

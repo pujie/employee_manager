@@ -1,9 +1,35 @@
+.button{
+font-size:12px;
+}
+.table_button{
+	font-size:10px;
+}
+.lib_table_body_odd:hover{
+	background: silver;
+	cursor:pointer;
+}
+.lib_table_body_even:hover{
+	background: silver;
+	cursor:pointer;
+}
+.table-display{
+	width:100%;
+}
+.thead-display{
+	background:black;
+	color:whitesmoke;
+}
 .tableless_label{
 float: left;
 width: 420px;
 font-weight: bold;
 }
-
+.lib_table_body_odd{
+	background:bisque;
+}
+.lib_table_body_even{
+	background:cornsilk;
+}
 .tableless_input, .tableless_textarea{
 width: 180px;
 margin-bottom: 5px;

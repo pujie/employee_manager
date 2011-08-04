@@ -17,7 +17,7 @@ var $navigator;
 		$modules=array();
 		$list_modules = array();
 		foreach($this->current_user->module as $module){
-			array_push($list_modules,anchor($module->url,$module->name));
+			array_push($list_modules,anchor($module->url,$module->name,'class="button"'));
 		}
 		array_push($modules,$list_modules);
 		return $modules;

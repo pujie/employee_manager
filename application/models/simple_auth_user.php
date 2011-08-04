@@ -13,10 +13,10 @@ var $navigator;
 		foreach($this as $user){
 			array_push($list,array($user->id,
 				$user->username,$user->email,
-				anchor('simple_auth_users/edit/' . $user->id,'Edit'),
-				anchor('simple_auth_users/delete/' . $user->id,'Delete'),
-				anchor('simple_auth_users/show_modules/' . $user->id,'Modules'),
-				anchor('simple_auth_users/show_branches/' . $user->id,'Branches')));
+				anchor('simple_auth_users/edit/' . $user->id,'Edit','class="table_button"'),
+				anchor('simple_auth_users/delete/' . $user->id,'Delete','class="table_button"'),
+				anchor('simple_auth_users/show_modules/' . $user->id,'Modules','class="table_button"'),
+				anchor('simple_auth_users/show_branches/' . $user->id,'Branches','class="table_button"')));
 		}
 		return $list;
 	}
@@ -27,7 +27,6 @@ var $navigator;
 	
 	function get_modules_list(){
 		$list	=	array();
-		$this->get();
 		foreach($this->module as $module){
 			array_push($list,array($module->id,
 				$module->name));

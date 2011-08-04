@@ -5,14 +5,11 @@ var $data = array();
 var $current_url;
 	function __construct(){
 		parent::__construct();
-		$this->load->helper('form');
 		$this->load->library('lib_table_manager');
-		$this->load->library('session');
-		$this->load->library('simple_auth');
+		$this->load->library('lib_table');
 		$this->load->library('menu');
-		$this->load->library('authentication');
-		$this->load->model('simple_auth_user');
 		$this->load->model('general');
+		$this->load->model('branch');
 		if($this->simple_auth->is_logged_in()){
 			$this->load->model('user_data');
 			$this->user=new User_data;
@@ -28,7 +25,12 @@ var $current_url;
 			$this->data['users']	=	$users;
 			$this->user->set_pagetitle('User List');
 			$this->user->set_title('User List');
-			$this->user->set_navigator(array(array(anchor('Simple_auth_users/add','Add User'),anchor('front_page/logout','Logout'))));
+			$navigator=array(
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users/add','Add User','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'));
+			$links=$this->user->get_links();
+			$this->user->set_navigator(array($navigator));
 			$this->data['user']=	$this->user;
 			$this->load->view('Simple_auth_users/index',$this->data);
 		}
@@ -81,6 +83,10 @@ var $current_url;
 			$this->data['emailbefore'] 		= $emailbefore;
 			$this->data['id']			= $id;
 			$this->data['title'] = '<h1>Edit User</h1>';
+			$this->user->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->load->view('simple_auth_users/edit',$this->data);
 		}
 	}
@@ -102,9 +108,12 @@ var $current_url;
 			$id = $this->uri->segment(3);
 			$module_user->where('id',$id);
 			$module_user->get();
+			$modules=$module_user->module->get();
+			
 			$this->user->set_navigator(array(array(
-				anchor('Simple_auth_users','Back to Users'),
-				anchor('UserManager/logout','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('UserManager/logout','Logout','class="button"'))));
 			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
 			$this->data['module_user']		=	$module_user;
 			$this->data['user']				=	$this->user;
@@ -153,11 +162,20 @@ var $current_url;
 			$this->user->set_title(humanize($branch_user->username) . '\'s Branch');
 		
 			$this->user->set_navigator(array(array(
-				anchor('Simple_auth_users','Back to Users'),
-				anchor('UserManager/logout','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('Simple_auth_users/add_branch/' . $id,'Add ' . humanize($branch_user->username) . '\'s Branch','class="button"'),
+				anchor('UserManager/logout','Logout','class="button"'))));
 			$this->data['branch_user']	=	$branch_user;
 			$this->data['user']			= 	$this->user;
 			$this->load->view('simple_auth_users/branches',$this->data);
 		}
+	}
+	function add_branch(){
+		$user=new Simple_auth_user;
+		$user->where('id',$this->uri->segment(3))->get();
+		// echo $this->uri->segment(3);
+		$this->data['user']=$user;
+		$this->load->view('simple_auth_users/add_branch',$this->data);
 	}
 }

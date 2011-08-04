@@ -1,5 +1,5 @@
 		<div id="footer">
-			<p> Trial version 2011 </p>
+			<p> <strong>PadiNet-<i>Webdev</i></strong> Division 2011 </p>
 		</div>
 	</div>  <!-- /wrapper  -->
 	</body> <!-- closing body -->

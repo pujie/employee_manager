@@ -1,5 +1,6 @@
 <?php
-echo $this->config->item('css');
+// echo $this->config->item('css');
+$this->load->view('common/header');
 echo $user->get_title();
 echo $user->get_user();
 echo form_open('app_modules/edit_handler');
@@ -9,4 +10,4 @@ echo 'URL' . form_input('url',$module->url) . '<br>';
 echo form_submit('save','Save');
 echo form_close();
 $this->lib_table_manager->create_table($user->get_navigator());
-$this->menu->links($user->get_links());
+$this->load->view('common/footer');
