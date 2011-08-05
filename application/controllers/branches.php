@@ -8,7 +8,7 @@ var $authentication;
 		parent::__construct();
 		$this->load->model('branch');
 		$this->load->model('general');
-		// $this->load->librar
+		$this->load->library('lib_table');
 		$this->authentication=new Authentication;
 		$this->data['css']		= $this->general->css();
 		$this->data['menu']		= $this->general->create_menu();
@@ -24,8 +24,9 @@ var $authentication;
 			$this->user->set_title('Branches');
 			$this->user->set_pagetitle('Branches');
 			$this->user->set_navigator(array(array(
-				anchor('branches/add','Add Branches'),
-				anchor('front_page/index','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('branches/add','Add Branches','class="button"'),
+				anchor('front_page/index','Logout','class="button"'))));
 			$this->data['user']		=	$this->user;
 			$this->data['branches']	=	$branches;
 			$this->load->view('Branches/index',$this->data);
@@ -33,12 +34,20 @@ var $authentication;
 	}
 	function add(){
 		$this->user->set_navigator(array(array(
-				anchor('branches/add','Add Branches'),
-				anchor('front_page/index','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('branches','Back to Branches','class="button"'),
+				anchor('front_page/index','Logout','class="button"'))));
 		$this->user->set_pagetitle('Add Branch');
 		$this->user->set_title('Add Branch');
 		$this->data['user']=$this->user;
 		$this->load->view('branches/add',$this->data);
+	}
+	function add_handler(){
+		$parameter=$this->input->post();
+		$branch=new Branch;
+		$branch->name=$parameter['name'];
+		$branch->save();
+		redirect('branches');
 	}
 	function edit(){
 		if($this->authentication->is_authenticated()){
@@ -51,11 +60,19 @@ var $authentication;
 			$this->user->set_title('Edit  ' . $branches->name . ' branch');
 			$this->user->set_pagetitle('Edit  ' . $branches->name . ' branch');
 			$this->user->set_navigator(array(array(
-				anchor('branches','Back to Branches'),
-				anchor('front_page/index','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('branches','Back to Branches','class="button"'),
+				anchor('front_page/index','Logout','class="button"'))));
 			$this->data['user']=$this->user;
 			$this->load->view('branches/edit',$this->data);
 		}
+	}
+	function edit_handler(){
+		$params	=	$this->input->post();
+		$branch	=	new Branch;
+		$branch->where('id',$params['id']);
+		$branch->update('name',$params['nama']);
+		redirect('branches');
 	}
 	function users(){
 		if($this->authentication->is_authenticated()){
@@ -117,22 +134,25 @@ var $authentication;
 			$branches = new Branch;
 			$branches->where('id',$id);
 			$branches->get();
-			
-			if($page == null){
-				$page	=	0;
-			}
-			$branches->set_client_list($id);
-
-			$this->data['branch_client']	=	$branches;
-
-			$this->user->set_title(humanize($this->user->get_user()) . ' \'sClients');
-			$this->user->set_pagetitle(humanize($this->user->get_user()) . ' \'s Clients');
+			$clients=$branches->client;
+			$this->data['clients']	=	$clients;
+			// $this->user->set_title(humanize($this->user->get_user()) . ' \'sClients');
+			// $this->user->set_pagetitle(humanize($this->user->get_user()) . ' \'s Clients');
 			$this->user->set_navigator(array(array(
-				anchor('branches/users/' . $id,'User'),
-				anchor('branches','Back to Branches'),
-				anchor('front_page/logout','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('branches','Back to Branches','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->data['user']			=	$this->user;
 			$this->load->view('branches/show_clients',$this->data);
 		}
+	}
+	function delete(){
+		$this->load->view('branches/delete');
+	}
+	function delete_handler(){
+		$branch	=	new Branch;
+		$branch->where('id',$this->uri->segment(3))->get();
+		$branch->delete();
+		redirect('branches');
 	}
 }

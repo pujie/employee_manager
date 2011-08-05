@@ -1,11 +1,13 @@
 <?php
 class Lib_table{
+var $header;
 	var $column_alignment;
 	function set_head($heads){
 		$list='';
 		foreach($heads as $head){
 			$list.='<th>' . $head . '</th>';
 		}
+		
 		return '<thead class="thead-display"><tr>' . $list . '</tr></thead>';
 	}
 	function set_body($bodies){
@@ -32,6 +34,23 @@ class Lib_table{
 				$k++;
 			}
 		return '<tbody>' . $tr_array . '</tbody>';
+	}
+	function set_head_object($head){
+		$this->header=$head;
+	}
+	function extract_object($object,$header){
+		$body=array();
+		foreach($object as $obj){
+		$row=array();
+			foreach($header as $hdr){
+				array_push($row,$obj->$hdr);
+			}
+			array_push($body,$row);
+		}
+		if ($this->header<>null){
+			$header=$this->header;
+		}
+		return $this->set_table('x',$header,$body);
 	}
 	function set_alignment($col,$alignment){
 		$this->column_alignment[$col]=$alignment;

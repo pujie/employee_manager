@@ -1,7 +1,10 @@
 <?php
+$this->load->view('common/header');
 echo $user->get_title();
 echo $user->get_pagetitle();
-echo $user->get_user();
-echo '<div>Dude, No branch add right now</div>';
+echo form_open('branches/add_handler');
+echo 'Name : ' . form_input('name');
+echo form_submit('save','Save');
+echo form_close();
 $this->lib_table_manager->create_table($user->get_navigator());
-$this->menu->links($user->get_links());
+$this->load->view('common/footer');

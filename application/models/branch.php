@@ -15,10 +15,10 @@ var $pagination_attributes;
 		$this->get();
 		foreach($this as $branch){
 			array_push($list,array($branch->id,$branch->name,					
-				anchor('branches/edit/' . $branch->id,'Edit'),
-				anchor('branches/delete/' . $branch->id,'Delete'),
-				anchor('branches/users/' . $branch->id,'Users'),
-				anchor('branches/show_clients/' . $branch->id,'Clients')
+				anchor('branches/edit/' . $branch->id,'Edit','class="table_button"'),
+				anchor('branches/delete/' . $branch->id,'Delete','class="table_button"'),
+				anchor('branches/users/' . $branch->id,'Users','class="table_button"'),
+				anchor('branches/show_clients/' . $branch->id,'Clients','class="table_button"')
 			));
 		}
 		return $list;

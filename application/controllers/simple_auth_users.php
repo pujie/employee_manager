@@ -113,6 +113,7 @@ var $current_url;
 			$this->user->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
 				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('Simple_auth_users/add_module/' . $id,'Add Modules','class="button"'),
 				anchor('UserManager/logout','Logout','class="button"'))));
 			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
 			$this->data['module_user']		=	$module_user;
@@ -127,9 +128,22 @@ var $current_url;
 			$user->get();
 			$this->data['title']='<h1>Add ' . humanize($user->username) . '\'s Module</h1>';
 			$this->data['user']=$user;
+			$this->user->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('Simple_auth_users/add_module','Add Modules','class="button"'),
+				anchor('UserManager/logout','Logout','class="button"'))));
 			$modules	= new Module;
 			$modules->get();
-			$this->data['modules']=$modules;
+			
+			$user_module = $user->module;
+			
+			$module_available=new Module;
+			$module_available->where_not_in('name',$user_module->name);
+			$module_available->get();
+			$this->data['user']=$user;
+			$this->data['user_data']=$this->user;
+			$this->data['modules']=$module_available;
 			$this->load->view('simple_auth_users/add_module',$this->data);
 		}
 	}
@@ -172,10 +186,17 @@ var $current_url;
 		}
 	}
 	function add_branch(){
+		if($this->authentication->is_authenticated()){
 		$user=new Simple_auth_user;
+		$id=$this->uri->segment(3);
 		$user->where('id',$this->uri->segment(3))->get();
-		// echo $this->uri->segment(3);
+			$this->user->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('Simple_auth_users','Back to Users','class="button"'),
+				anchor('UserManager/logout','Logout','class="button"'))));
+			$this->data['user_data']			= 	$this->user;
 		$this->data['user']=$user;
 		$this->load->view('simple_auth_users/add_branch',$this->data);
+		}
 	}
 }

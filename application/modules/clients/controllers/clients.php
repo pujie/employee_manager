@@ -61,12 +61,13 @@ var $pagination_attributes;
 						$client->branch->name, 
 						$client->category->KATEGORI, 
 						$client->service->LAYANAN,
-						anchor('clients/edit/' . $client->id,'Edit','class="table_button"')
+						anchor('clients/edit/' . $client->id . '?last_url=' . current_url(),'Edit','class="table_button"')
 					)
 				);
 			}
 			$this->data['head']=$this->head;
 			$this->data['body']=$body;
+			$this->data['current_url']= current_url();
 			$this->pagination->initialize($pagination_attribute);
 			$this->user_data->set_title('Clients');
 			$this->user_data->set_navigator(array(array(
@@ -99,16 +100,33 @@ var $pagination_attributes;
 	function edit(){
 		if($this->authentication->is_authenticated()){
 			$id=$this->uri->segment(3);
+			$params=$this->input->get();
 			$client=new Client;
 			$user=new User_data;
 			$user->set_pagetitle('Edit Client');
 			$user->set_title('Edit Client');
-			$user->set_navigator(array(array(anchor('Client/list_clients','Back to Clients','class="button"'),anchor('clients/get_excel','Get Excel','class="button"'),anchor('front_page/logout','Logout','class="button"'))));
+			$user->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor($params['last_url'],'Back to Clients','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$client->where('id',$id);
 			$client->get();
 			$this->data['client']=$client;
 			$this->data['user']=$user;
+			$this->data['last_url']=$params['last_url'];
 			$this->load->view('edit',$this->data);
+		}
+	}
+	function edit_handler(){
+		if($this->authentication->is_authenticated()){
+			$client=new Client;
+			$params=$this->input->post();
+			$fields=$this->db->list_fields('clients');
+			foreach($fields as $field){
+				$client->$field=$params[$field];
+			}
+			$client->save();
+			redirect($params['last_url']);
 		}
 	}
 	function find_handler(){
@@ -121,17 +139,6 @@ var $pagination_attributes;
 		}
 	}
 	
-	function edit_handler(){
-		if($this->authentication->is_authenticated()){
-			$client=new Client;
-			$params=$this->input->post();
-			$fields=$this->db->list_fields('clients');
-			foreach($fields as $field){
-				$client->$field=$params[$field];
-			}
-			$client->save();
-		}
-	}
 	function get_excel(){
 		$filename='clients.xls';
 		$this->output->set_header('Content-type: application/ms-excel');

@@ -15,6 +15,7 @@
 				$("#tabs").tabs();
 				$(".button").button();
 				$('.table_button').button();
+				$('.pagination a').button();
 			})
 		</script>
     </head>

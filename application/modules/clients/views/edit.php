@@ -8,9 +8,9 @@
 <li><a href="#description">Description</a></li>
 <li><a href="#service">Service</a></li>
 </ul>
-<?php echo form_open('clients/edit_handler');?>
+<?php echo form_open('clients/edit_handler' );?>
 <div id="contact">
-
+<?php echo form_hidden('last_url',$last_url);?>
 <label for='id' class='tableless_label'>id</label>
 <input type='text' name='id' value='<?php echo $client->id?>' class='tableless_input' ></br>
 <label for='NAMA_PELANGGAN' class='tableless_label'>Client Name</label>
@@ -115,5 +115,4 @@
 <?php echo form_close();?>
 </div>
 <?php $this->lib_table_manager->create_table($user->get_navigator()) ?>
-<?php $this->menu->links($user->get_links())?>	
 </body>
