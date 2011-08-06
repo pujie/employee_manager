@@ -30,6 +30,17 @@ float: left;
 width: 420px;
 font-weight: bold;
 }
+
+.tableless_login_label{
+float: left;
+width: 120px;
+font-weight: bold;
+}
+.tableless_login_input{
+width: 220px;
+font-weight: bold;
+}
+
 .lib_table_body_odd{
 	background:bisque;
 }

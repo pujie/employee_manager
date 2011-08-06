@@ -83,7 +83,8 @@ class Front_page extends CI_Controller{
 		}
 		else{
 			$this->data['success']		=	FALSE;
-			echo 'You are not authenticated in yet';
+			$this->load->view('front_page/not_loged_in');
+			// echo 'You are not authenticated in yet';
 		}
 	}
 	function logout(){
