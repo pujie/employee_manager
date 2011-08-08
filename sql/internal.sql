@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 28, 2011 at 05:25 PM
+-- Generation Time: Aug 08, 2011 at 10:02 AM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -30,12 +30,17 @@ CREATE TABLE IF NOT EXISTS `branches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `branches`
 --
 
+INSERT INTO `branches` (`id`, `name`) VALUES
+(1, 'Surabaya'),
+(2, 'Malang'),
+(3, 'Jakarta'),
+(4, 'semarang');
 
 -- --------------------------------------------------------
 
@@ -92,8 +97,7 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-('5d29adf57b486cdbd66495ce4981c709', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/', 1311844922, 'a:4:{s:2:"id";s:1:"1";s:8:"username";s:5:"pujie";s:5:"email";s:14:"pujie@padi.net";s:4:"salt";s:40:"a6e5230560ae5b8b39ff38dbacbf860d2bf56b42";}'),
-('6a3664cffdb8cc0db6bb81fd5708bda5', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/', 1311838872, '');
+('5f9a9a6d19103c03f4534e635c345ee4', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/', 1312613067, 'a:4:{s:2:"id";s:1:"1";s:8:"username";s:5:"pujie";s:5:"email";s:14:"pujie@padi.net";s:4:"salt";s:40:"a6e5230560ae5b8b39ff38dbacbf860d2bf56b42";}');
 
 -- --------------------------------------------------------
 
@@ -179,6 +183,12 @@ CREATE TABLE IF NOT EXISTS `modules_simple_auth_users` (
 -- Dumping data for table `modules_simple_auth_users`
 --
 
+INSERT INTO `modules_simple_auth_users` (`module_id`, `simple_auth_user_id`) VALUES
+(1, 1),
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 9);
 
 -- --------------------------------------------------------
 
@@ -196,7 +206,6 @@ CREATE TABLE IF NOT EXISTS `product` (
 --
 -- Dumping data for table `product`
 --
-
 
 -- --------------------------------------------------------
 
@@ -252,6 +261,8 @@ CREATE TABLE IF NOT EXISTS `simple_auth_users` (
 -- Dumping data for table `simple_auth_users`
 --
 
+INSERT INTO `simple_auth_users` (`id`, `username`, `email`, `password`, `salt`, `status`) VALUES
+(1, 'pujie', 'pw.prayitno@telkom.net', 'c11926cf527f8553e8b9c56ec0e5c8de83696d48', 'a6e5230560ae5b8b39ff38dbacbf860d2bf56b42', 1),
 
 -- --------------------------------------------------------
 
