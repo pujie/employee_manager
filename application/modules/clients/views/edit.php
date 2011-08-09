@@ -51,8 +51,18 @@
 
 </div>
 <div id="description">
-<label for='branch_id' class='tableless_label'>Branch</label>
-<input type='text' name='branch_id' value='<?php echo $client->branch_id?>' class='tableless_input' ></br>
+<label for='branches' class='tableless_label'>Branch</label>
+<?php 
+$branches=new Branch;
+$branches->get();
+$attr='class="tableless_input",name="branches"';
+$branches_array=array();
+foreach($branches as $branch){
+$branches_array[$branch->id]=$branch->name;
+}
+echo form_dropdown('branches',$branches_array,$client->branch_id,$attr);
+echo '<br>';
+?>
 <label for='category_id' class='tableless_label'>Category</label>
 <input type='text' name='category_id' value='<?php echo $client->category_id?>' class='tableless_input' ></br>
 

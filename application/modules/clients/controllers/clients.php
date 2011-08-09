@@ -3,7 +3,6 @@ class Clients extends CI_Controller{
 var $data;
 var $authentication;
 var $head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
-var $body;
 var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
@@ -11,6 +10,7 @@ var $pagination_attributes;
 		$this->load->model('general');
 		$this->data['css']			=	$this->general->css();
 		$this->load->library('lib_table');
+		$this->load->library('OLERead');
 		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 		if($this->simple_auth->is_logged_in()){
 			$this->load->model('user_data');
@@ -28,18 +28,31 @@ var $pagination_attributes;
 	function index(){
 		redirect('clients/list_clients');
 	}
+	function list_clients2(){
+		if($this->authentication->is_authenticated()){
+			$user=new Simple_auth_user;
+			$user->where('id',$this->session->userdata['id']);
+			$user->get();
+			$body=array();
+			$clients=$user->where_related('branch','id',1)->get();
+			foreach($clients as $client){
+			echo $client->nama . '<br>';
+			}
+			// echo $this->lib_table->set_table('client',$this->head,$body);
+		}
+	}
 	function list_clients(){
 		if($this->authentication->is_authenticated()){
 			$user=new Simple_auth_user;
 			$user->where('id',$this->session->userdata['id']);
 			$user->get();
-			$branch					= 	$user->branch->get();
+			$branch					= 	$user->branch->get_iterated();
 			if($this->uri->segment(4)<>null){
 				$clients				=	$branch->client->like('NAMA_PELANGGAN',$this->uri->segment(4));
 				$pagination_attribute['per_page']	=	10;
 			}
 			else{
-				$clients				= 	$branch->client->get();
+				$clients				= 	$branch->client->get_iterated();
 				$clients->set_pagination_attributes(10,$clients->count(),base_url() . '/index.php/clients/list_clients/');
 				$pagination_attribute	=	$clients->get_pagination_attributes();
 			}
@@ -66,7 +79,7 @@ var $pagination_attributes;
 				);
 			}
 			$this->data['head']=$this->head;
-			$this->data['body']=$body;
+			$this->data['body']=$body;$this->body=$body;
 			$this->data['current_url']= current_url();
 			$this->pagination->initialize($pagination_attribute);
 			$this->user_data->set_title('Clients');
@@ -139,13 +152,82 @@ var $pagination_attributes;
 		}
 	}
 	
-	function get_excel(){
-		$filename='clients.xls';
-		$this->output->set_header('Content-type: application/ms-excel');
-		$this->output->set_header('Content-Disposition: attachment; filename='.$filename);
-		echo $this->lib_table->set_table('clients',$this->head,$this->body);
-		// foreach($this->head as $head ){
-		// echo $head;
-		// }
+	function get_excel(){	
+		$head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE');
+		$clients=new Client;
+		$clients->get();
+		$client_list=array();
+		foreach($clients as $client){
+			array_push($client_list,array($client->KODE_PELANGGAN,$client->NAMA_PELANGGAN,$client->branch->name,$client->category->name,$client->service));
+		}
+		$this->data['head']=$head;
+		$this->data['client_list']=$client_list;
+		$this->load->view('get_excel',$this->data);
+	}
+	function import(){
+		$this->user_data->set_navigator(array(
+				anchor('clients/verify_import','IMPORT','class="button"'),
+				array(anchor('/','Home','class="button"'),anchor('clients','Back to Clients','class="button"'),anchor('front_page','Logout','class="button"'))
+			));
+			$this->load->view('import');
+	}
+	function verify_import(){		
+		error_reporting(E_ALL ^ E_NOTICE);
+		$excel = new Spreadsheet_Excel_Reader("C:\\Users\Baltix\httpd\htdocs\store\internal2\excel\clients.xls");
+		$excel->setOutputEncoding('CP1251');
+		$head=array();
+			foreach($this->db->list_fields('clients') as $key=>$value){
+				array_push($head,$value);
+			}
+		$body=array();
+		for ($x = 2; $x <= count($excel->sheets[0]["cells"]); $x++) {
+			$body_item=array();
+			foreach($this->db->list_fields('clients') as $key=>$value){
+				$name = $excel->sheets[0]["cells"][$x][$key+1];
+				array_push($body_item,$name);
+			}
+			array_push($body,$body_item);
+		}
+		$this->user_data->set_navigator(array(
+				anchor('clients/execute_import','Execute','class="button"'),
+				array(anchor('/','Home','class="button"'),anchor('clients','Back to Clients','class="button"'),anchor('front_page','Logout','class="button"'))
+			));
+		$data['head']=$head;
+		$data['body']=$body;
+		$this->load->view('verify_import',$data);
+	}
+	function execute_import(){
+		error_reporting(E_ALL ^ E_NOTICE);
+		$excel = new Spreadsheet_Excel_Reader("C:\\Users\Baltix\httpd\htdocs\store\internal2\excel\clients.xls");
+		$excel->setOutputEncoding('CP1251');
+		$head=array();
+			foreach($this->db->list_fields('clients') as $key=>$value){
+				array_push($head,$value);
+			}
+		$body=array();
+		for ($x = 2; $x <= count($excel->sheets[0]["cells"]); $x++) {
+			$client=new Client();
+			foreach($this->db->list_fields('clients') as $key=>$value){
+				if($key>0){
+				$name = $excel->sheets[0]["cells"][$x][$key+1];
+				//this is not good
+				if($this->is_excel_date($name)){
+					$name=$this->make_php_date($name);
+				}
+				$client->$value=$name;
+				// echo $client->get_sql() . ' ' . $value . ' <br>';
+				}
+			}
+			$client->save();
+		}
+		redirect('clients');
+	}
+	function is_excel_date($maybe_date){
+		return preg_match( '`^\d{1,2}/\d{1,2}/\d{4}$`', $maybe_date ) ;
+	}
+	function make_php_date($excel_date){
+		$tmp=explode('/',$excel_date);
+		$result=$tmp[2] . '-' . $tmp[0] . '-' . $tmp[1];
+		return $result;
 	}
 }
