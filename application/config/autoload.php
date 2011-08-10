@@ -52,7 +52,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database','datamapper','session','simple_auth','pagination','lib_table_manager','authentication','menu');
+$autoload['libraries'] = array('database','datamapper','session','simple_auth','pagination','lib_table_manager','authentication','menu','lib_table');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Simple_auth_user');
+$autoload['model'] = array('Simple_auth_user','general');
 
 
 /* End of file autoload.php */

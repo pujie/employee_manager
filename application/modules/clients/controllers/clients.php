@@ -7,9 +7,6 @@ var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
 		$this->load->model('client');
-		$this->load->model('general');
-		$this->data['css']			=	$this->general->css();
-		$this->load->library('lib_table');
 		$this->load->library('OLERead');
 		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 		if($this->simple_auth->is_logged_in()){
@@ -27,19 +24,6 @@ var $pagination_attributes;
 	
 	function index(){
 		redirect('clients/list_clients');
-	}
-	function list_clients2(){
-		if($this->authentication->is_authenticated()){
-			$user=new Simple_auth_user;
-			$user->where('id',$this->session->userdata['id']);
-			$user->get();
-			$body=array();
-			$clients=$user->where_related('branch','id',1)->get();
-			foreach($clients as $client){
-			echo $client->nama . '<br>';
-			}
-			// echo $this->lib_table->set_table('client',$this->head,$body);
-		}
 	}
 	function list_clients(){
 		if($this->authentication->is_authenticated()){
@@ -78,9 +62,11 @@ var $pagination_attributes;
 					)
 				);
 			}
-			$this->data['head']=$this->head;
-			$this->data['body']=$body;$this->body=$body;
-			$this->data['current_url']= current_url();
+			$form_array	=	array(
+				'head'=>$this->head,
+				'body'=>$body,
+				'current_url'=> current_url()
+			);
 			$this->pagination->initialize($pagination_attribute);
 			$this->user_data->set_title('Clients');
 			$this->user_data->set_navigator(array(array(
@@ -89,6 +75,7 @@ var $pagination_attributes;
 				anchor('clients/get_excel','Get Excel','class="button"'),
 				anchor('clients/import','Import','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))));
+				$this->data	=	array_merge($form_array,$this->data);
 			$this->load->view('index',$this->data);
 		}
 	}
@@ -124,9 +111,12 @@ var $pagination_attributes;
 				anchor('front_page/logout','Logout','class="button"'))));
 			$client->where('id',$id);
 			$client->get();
-			$this->data['client']=$client;
-			$this->data['user']=$user;
-			$this->data['last_url']=$params['last_url'];
+			$form_data	=	array(
+				'client'=>$client,
+				'user'=>$user,
+				'last_url'=>$params['last_url']
+			);
+			$this->data	=	array_merge($form_data,$this->data);
 			$this->load->view('edit',$this->data);
 		}
 	}
@@ -153,15 +143,17 @@ var $pagination_attributes;
 	}
 	
 	function get_excel(){	
-		$head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE');
 		$clients=new Client;
 		$clients->get();
 		$client_list=array();
 		foreach($clients as $client){
 			array_push($client_list,array($client->KODE_PELANGGAN,$client->NAMA_PELANGGAN,$client->branch->name,$client->category->name,$client->service));
 		}
-		$this->data['head']=$head;
-		$this->data['client_list']=$client_list;
+		$form_array	=	array(
+		'head'			=>	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE'),
+		'client_list'	=>	$client_list
+		);
+		$this->data	=	array_merge($form_array,$this->data);
 		$this->load->view('get_excel',$this->data);
 	}
 	function import(){

@@ -7,8 +7,6 @@ var $authentication;
 	function __construct(){
 		parent::__construct();
 		$this->load->model('branch');
-		$this->load->model('general');
-		$this->load->library('lib_table');
 		$this->authentication=new Authentication;
 		$this->data['css']		= $this->general->css();
 		$this->data['menu']		= $this->general->create_menu();
@@ -79,16 +77,19 @@ var $authentication;
 			$branch_id = $this->uri->segment(3);
 			$branches = new Branch;
 			$branches->where('id',$branch_id)->get();
-			$this->data['branch_id']	=	$branch_id;
 			$this->user->set_navigator(array(array(
-				anchor('branches/add_user/' . $branch_id,'Add User'),
-				anchor('branches','Back to Branches'),
-				anchor('front_page/logout','Logout'))));
+				anchor('/','Home','class="button"'),
+				anchor('branches/add_user/' . $branch_id,'Add User','class="button"'),
+				anchor('branches','Back to Branches','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->user->set_title('Branch Users');
 			$this->user->set_pagetitle('Branch Users');
-			$this->data['branch']	=	$branches;
-			$this->data['user']		=	$this->user;
-			
+			$form_array	=	array(
+				'branch'	=>	$branches,
+				'user'		=>	$this->user,
+				'branch_id'	=>	$branch_id
+			);
+			$this->data	=	array_merge($form_array,$this->data);
 			$this->load->view('branches/users',$this->data);
 		}
 	}
@@ -136,8 +137,6 @@ var $authentication;
 			$branches->get();
 			$clients=$branches->client;
 			$this->data['clients']	=	$clients;
-			// $this->user->set_title(humanize($this->user->get_user()) . ' \'sClients');
-			// $this->user->set_pagetitle(humanize($this->user->get_user()) . ' \'s Clients');
 			$this->user->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
 				anchor('branches','Back to Branches','class="button"'),

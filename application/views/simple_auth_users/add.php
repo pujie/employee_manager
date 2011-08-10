@@ -1,11 +1,13 @@
 <?php
-echo $css;
-echo $menu;
+$this->load->view('common/header');
 echo $title;
-echo form_open('Simple_auth_users/add_handler');
-echo '<dl>User Name<dt>' . form_input('username','name') . '</dt></dl>';
-echo '<dl>User Email<dt>' . form_input('email','email') . '</dt></dl>';
-echo '<dl>User Password<dt>' . form_password('userpassword','password') . '</dt></dl>';
-
-echo form_submit('submit','Add User') . '';
+echo form_open('simple_auth_users/add_handler');
+echo form_label('Name','name',$name_label); 
+echo form_input($name ) . '<br>';
+echo form_label('Email','password',$email_label);
+echo form_input($email) . '<br>';
+echo form_label('Password','password',$pass_label);
+echo form_password($password) . '<br>';
+echo form_submit('submit','Login');
 echo form_close();
+$this->load->view('common/footer');
