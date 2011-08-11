@@ -2,7 +2,7 @@
 class Client extends DataMapper{
 var $pagination_attribute;
 		var $has_one = array(
-		'category','service','branch'
+		'category','service','branch','business_field'
 	);
 	function __construct(){
 		parent::__construct();
@@ -12,7 +12,7 @@ var $pagination_attribute;
 		foreach($clients as $client){
 			array_push($list,array(
 					$client->KODE_PELANGGAN,
-					$client->NAMA_PELANGGAN, 
+					$client->name, 
 					$client->branch->name, 
 					$client->category->KATEGORI, 
 					$client->service->LAYANAN,

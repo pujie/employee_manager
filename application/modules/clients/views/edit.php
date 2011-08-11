@@ -13,25 +13,25 @@
 <?php echo form_hidden('last_url',$last_url);?>
 <label for='id' class='tableless_label'>id</label>
 <input type='text' name='id' value='<?php echo $client->id?>' class='tableless_input' ></br>
-<label for='NAMA_PELANGGAN' class='tableless_label'>Client Name</label>
-<input type='text' name='NAMA_PELANGGAN' value='<?php echo $client->NAMA_PELANGGAN?>' class='tableless_input' ></br>
-<label for='ALAMAT' class='tableless_label'>Adress</label>
-<input type='text' name='ALAMAT' value='<?php echo $client->ALAMAT?>' class='tableless_input' ></br>
+<label for='name' class='tableless_label'>Client Name</label>
+<input type='text' name='name' value='<?php echo $client->name?>' class='tableless_input' ></br>
+<label for='address' class='tableless_label'>Adress</label>
+<input type='text' name='address' value='<?php echo $client->address?>' class='tableless_input' ></br>
 
-<label for='TELP' class='tableless_label'>Telp</label>
-<input type='text' name='TELP' value='<?php echo $client->TELP?>' class='tableless_input' ></br>
+<label for='telp' class='tableless_label'>Telp</label>
+<input type='text' name='telp' value='<?php echo $client->telp?>' class='tableless_input' ></br>
 
-<label for='FAX' class='tableless_label'>Fax</label>
-<input type='text' name='FAX' value='<?php echo $client->FAX?>' class='tableless_input' ></br>
+<label for='fax' class='tableless_label'>Fax</label>
+<input type='text' name='fax' value='<?php echo $client->fax?>' class='tableless_input' ></br>
 
-<label for='NAMA_PEMOHON' class='tableless_label'>Applicant</label>
-<input type='text' name='NAMA_PEMOHON' value='<?php echo $client->NAMA_PEMOHON?>' class='tableless_input' ></br>
+<label for='applicant' class='tableless_label'>Applicant</label>
+<input type='text' name='applicant' value='<?php echo $client->applicant?>' class='tableless_input' ></br>
 
 <label for='NO_FB' class='tableless_label'>FB</label>
 <input type='text' name='NO_FB' value='<?php echo $client->NO_FB?>' class='tableless_input' ></br>
 
-<label for='TGL_FB' class='tableless_label'>FB Date</label>
-<input type='text' name='TGL_FB' value='<?php echo $client->TGL_FB?>' class='tableless_input' ></br>
+<label for='fb_date' class='tableless_label'>FB Date</label>
+<input type='text' name='fb_date' value='<?php echo $client->fb_date?>' class='tableless_input' ></br>
 
 <label for='NO_ID' class='tableless_label'>ID Num</label>
 <input type='text' name='NO_ID' value='<?php echo $client->NO_ID?>' class='tableless_input' ></br>
@@ -45,8 +45,8 @@
 <label for='HP2' class='tableless_label'>HP2</label>
 <input type='text' name='HP2' value='<?php echo $client->HP2?>' class='tableless_input' ></br>
 
-<label for='EMAIL' class='tableless_label'>Email</label>
-<input type='text' name='EMAIL' value='<?php echo $client->EMAIL?>' class='tableless_input' ></br>
+<label for='email' class='tableless_label'>Email</label>
+<input type='text' name='email' value='<?php echo $client->email?>' class='tableless_input' ></br>
 
 
 </div>
@@ -69,12 +69,22 @@ echo '<br>';
 <label for='service_id' class='tableless_label'>Service</label>
 <input type='text' name='service_id' value='<?php echo $client->service_id?>' class='tableless_input' ></br>
 
-<label for='LAINNYA' class='tableless_label'>Other</label>
-<input type='text' name='LAINNYA' value='<?php echo $client->LAINNYA?>' class='tableless_input' ></br>
+<label for='lainnya' class='tableless_label'>Other</label>
+<input type='text' name='lainnya' value='<?php echo $client->lainnya?>' class='tableless_input' ></br>
+
 
 
 <label for='JENIS_USAHA' class='tableless_label'>Business Type</label>
-<input type='text' name='JENIS_USAHA' value='<?php echo $client->JENIS_USAHA?>' class='tableless_input' ></br>
+<?php
+$option=array();
+$business_fields=new Business_field;
+$business_fields->get();
+foreach($business_fields as $field){
+	$option[$field->id]	=	$field->name;
+}
+echo form_dropdown('business',$option,$client->business_field_id) . '<br>';
+?>
+
 
 <label for='SIUP' class='tableless_label'>SIUP</label>
 <input type='text' name='SIUP' value='<?php echo $client->SIUP?>' class='tableless_input' ></br>
@@ -102,8 +112,8 @@ echo '<br>';
 <label for='KETERANGAN_LAYANAN' class='tableless_label'>Service Desc</label>
 <input type='text' name='KETERANGAN_LAYANAN' value='<?php echo $client->KETERANGAN_LAYANAN?>' class='tableless_input' ></br>
 
-<label for='TGL_AKTIFASI' class='tableless_label'>Activation Date</label>
-<input type='text' name='TGL_AKTIFASI' value='<?php echo $client->TGL_AKTIFASI?>' class='tableless_input' ></br>
+<label for='activation_date' class='tableless_label'>Activation Date</label>
+<input type='text' name='activation_date' value='<?php echo $client->activation_date?>' class='tableless_input' ></br>
 
 <label for='PERIODE_LANGGANAN' class='tableless_label'>Date Period</label>
 <input type='text' name='PERIODE_LANGGANAN' value='<?php echo $client->PERIODE_LANGGANAN?>' class='tableless_input' ></br>

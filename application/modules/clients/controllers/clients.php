@@ -7,6 +7,9 @@ var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
 		$this->load->model('client');
+		$this->load->model('branch');
+		$this->load->model('category');
+		$this->load->model('service');
 		$this->load->library('OLERead');
 		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 		if($this->simple_auth->is_logged_in()){
@@ -32,7 +35,7 @@ var $pagination_attributes;
 			$user->get();
 			$branch					= 	$user->branch->get_iterated();
 			if($this->uri->segment(4)<>null){
-				$clients				=	$branch->client->like('NAMA_PELANGGAN',$this->uri->segment(4));
+				$clients				=	$branch->client->like('name',$this->uri->segment(4));
 				$pagination_attribute['per_page']	=	10;
 			}
 			else{
@@ -54,7 +57,7 @@ var $pagination_attributes;
 			foreach($clients as $client){
 				array_push($body,array(
 						$client->KODE_PELANGGAN,
-						$client->NAMA_PELANGGAN, 
+						$client->name, 
 						$client->branch->name, 
 						$client->category->KATEGORI, 
 						$client->service->LAYANAN,
@@ -72,8 +75,8 @@ var $pagination_attributes;
 			$this->user_data->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
 				anchor('clients/add','Add Client','class="button"'),
-				anchor('clients/get_excel','Get Excel','class="button"'),
-				anchor('clients/import','Import','class="button"'),
+				anchor('clients/get_excel','Export to Excel','class="button"'),
+				anchor('clients/import','Import from Excel','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))));
 				$this->data	=	array_merge($form_array,$this->data);
 			$this->load->view('index',$this->data);
@@ -84,6 +87,7 @@ var $pagination_attributes;
 		if($this->authentication->is_authenticated()){
 			$fields=$this->db->list_fields('clients');
 			$this->data['fields']=$fields;
+			$this->user_data->set_navigator(array(array(anchor('/','Home','class="button"'),anchor('clients','Back to Clients','class="button"'),anchor('front_page/logout','Logout','class="button"'))));
 			$this->load->view('add',$this->data);
 		}
 	}
@@ -147,7 +151,7 @@ var $pagination_attributes;
 		$clients->get();
 		$client_list=array();
 		foreach($clients as $client){
-			array_push($client_list,array($client->KODE_PELANGGAN,$client->NAMA_PELANGGAN,$client->branch->name,$client->category->name,$client->service));
+			array_push($client_list,array($client->KODE_PELANGGAN,$client->name,$client->branch->name,$client->category->name,$client->service));
 		}
 		$form_array	=	array(
 		'head'			=>	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE'),
