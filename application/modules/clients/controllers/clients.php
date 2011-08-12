@@ -30,7 +30,7 @@ var $pagination_attributes;
 	}
 	function list_clients(){
 		if($this->authentication->is_authenticated()){
-			$user=new Simple_auth_user;
+			$user=new User;
 			$user->where('id',$this->session->userdata['id']);
 			$user->get();
 			$branch					= 	$user->branch->get_iterated();
@@ -56,10 +56,10 @@ var $pagination_attributes;
 			$body=array();
 			foreach($clients as $client){
 				array_push($body,array(
-						$client->KODE_PELANGGAN,
+						$client->kode_pelanggan,
 						$client->name, 
 						$client->branch->name, 
-						$client->category->KATEGORI, 
+						$client->category->kategori, 
 						$client->service->LAYANAN,
 						anchor('clients/edit/' . $client->id . '?last_url=' . current_url(),'Edit','class="table_button"')
 					)
@@ -75,6 +75,8 @@ var $pagination_attributes;
 			$this->user_data->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
 				anchor('clients/add','Add Client','class="button"'),
+				anchor('categories','Categories','class="button"'),
+				anchor('services','Services','class="button"'),
 				anchor('clients/get_excel','Export to Excel','class="button"'),
 				anchor('clients/import','Import from Excel','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))));
@@ -151,7 +153,7 @@ var $pagination_attributes;
 		$clients->get();
 		$client_list=array();
 		foreach($clients as $client){
-			array_push($client_list,array($client->KODE_PELANGGAN,$client->name,$client->branch->name,$client->category->name,$client->service));
+			array_push($client_list,array($client->kode_pelanggan,$client->name,$client->branch->name,$client->category->name,$client->service));
 		}
 		$form_array	=	array(
 		'head'			=>	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE'),

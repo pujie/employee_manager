@@ -11,31 +11,31 @@ class Services extends CI_Controller{
 		$services->get();
 		$c=0;
 		foreach($services as $service){
-			$list[$c] = array($service->LAYANAN,anchor('services/detail/' . $service->id,'Edit'));
+			$list[$c] = array($service->layanan,anchor('services/detail/' . $service->id,'Edit','class="table_button"'));
 			$c++;
 		}
-		if(empty($list)){
-			echo '<div>The list is empty</div>';
-		}else{
-			$this->lib_table_manager->create_table($list);
-		}
+		$data	=	array(
+			'list'=>$list,
+			'navigator'=>array(array(anchor('/','Home','class="button"'),anchor('/','Back','class="button"'),anchor('front_page/logout','Logout','class="button"')))
+			);
+		$this->load->view('services/index',$data);
 	}
 	function detail(){
 		$id = $this->uri->segment(3);
 		$services = new Service;
 		$services->where('id',$id);
 		$services->get();
-		$services->client->get()->order_by('NAMA_PELANGGAN');
-		echo $services->LAYANAN;
+		$services->client->get()->order_by('name');
+		echo $services->layanan;
 		$c = 0;
 		foreach($services->client->all as $client){
-			$list[$c] = $client->NAMA_PELANGGAN;
+			$list[$c] = array($client->name);
 			$c++;
 		}
-		if(empty($list)){
-			echo '<div>The list is empty</div>';
-		}else{
-			$this->lib_table_manager->create_table($list);
-		}
+		$data	=	array(
+			'list'=>$list,
+			'navigator'=>array(array(anchor('/','Home','class="button"'),anchor('front_page/logout','Logout','class="button"')))
+		);
+		$this->load->view('services/detail',$data);
 	}
 }

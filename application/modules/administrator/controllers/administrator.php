@@ -4,13 +4,7 @@ var $data;
 var $user;
 	function __construct(){
 		parent::__construct();
-		$this->load->library('lib_table_manager');
-		$this->load->library('menu');
 		$this->load->library('lib_raw_menu');
-		$this->load->library('simple_auth');
-		$this->load->library('session');
-		$this->load->model('general');
-		$this->load->model('user_data');
 		$this->data['css']=$this->general->css();
 		$this->data['menu']=$this->general->create_menu();
 		if($this->simple_auth->is_logged_in($this->session->userdata['id'])){
@@ -22,7 +16,7 @@ var $user;
 		$this->user->set_navigator(array(array(
 			anchor('/','Home','class="button"'),
 			anchor('app_modules','Modules','class="button"'),
-			anchor('simple_auth_users/index','Users','class="button"'),
+			anchor('users/index','Users','class="button"'),
 			anchor('branches','Branches','class="button"'),
 			anchor('front_page/logout','Logout','class="button"'))));
 

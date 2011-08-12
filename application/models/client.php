@@ -11,10 +11,10 @@ var $pagination_attribute;
 		$list=array();
 		foreach($clients as $client){
 			array_push($list,array(
-					$client->KODE_PELANGGAN,
+					$client->kode_pelanggan,
 					$client->name, 
 					$client->branch->name, 
-					$client->category->KATEGORI, 
+					$client->category->kategori, 
 					$client->service->LAYANAN,
 					anchor('clients/edit/' . $client->id,'Edit')
 				)

@@ -44,7 +44,7 @@ class Simple_auth
 	{
 		$qry = $this->CI->db->select('id, username, email, password, salt')
 							->where('username', $username)
-							->get('simple_auth_users');
+							->get('users');
 		
 		// No results, we're done.
 		if ($qry->num_rows() !== 1)
@@ -111,7 +111,7 @@ class Simple_auth
 	{
 		$qry = $this->CI->db->where('username', $username)
 							->or_where('email', $email)
-							->get('simple_auth_users');
+							->get('users');
 		
 		if ($qry->num_rows() !== 0)
 		{
@@ -129,7 +129,7 @@ class Simple_auth
 		);
 		
 		$this->CI->db->where('status', 1)
-					 ->insert('simple_auth_users', $data);
+					 ->insert('users', $data);
 		
 		return $this->CI->db->insert_id();
 	}
@@ -167,7 +167,7 @@ class Simple_auth
 		
 		$this->CI->db->where('id', $this->CI->session->userdata('id'))
 					 ->set('password', $password)
-					 ->update('simple_auth_users');
+					 ->update('users');
 		
 		// garbage collect on unused hashes
 		$this->_hash_gc();
@@ -181,7 +181,7 @@ class Simple_auth
 		$password = sha1($password.$user_salt);
 		$this->CI->db->where('id', $id)
 					 ->set('password', $password)
-					 ->update('simple_auth_users');
+					 ->update('users');
 		
 		// garbage collect on unused hashes
 		$this->_hash_gc();
@@ -221,7 +221,7 @@ class Simple_auth
 	{
 		// Does this email address exist in the database?
 		$query = $this->CI->db->select('id, username')
-							  ->get_where('simple_auth_users',
+							  ->get_where('users',
 									array('email' => $email_address));
 		
 		if ($query->num_rows() === 0)

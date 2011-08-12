@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Simple_auth_user','general');
+$autoload['model'] = array('user','general');
 
 
 /* End of file autoload.php */

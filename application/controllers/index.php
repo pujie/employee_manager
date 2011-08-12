@@ -12,7 +12,7 @@ var $data;
 	}
 	function index(){
 		if($this->simple_auth->is_logged_in()){
-			$user=new Simple_auth_user;
+			$user=new User;
 			$this->user_data=new User_data;		
 			$user->where('id',$this->session->userdata('id'));
 			$user->get();

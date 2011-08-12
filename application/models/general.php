@@ -36,4 +36,7 @@ class General extends CI_Model{
 		$css = '<link rel="stylesheet" type="text/css" href=' . $css_link . 'css_style.css' . '>';
 		return $css;
 	}
+	function back_one_page(){
+		echo '<script type="text/javascript">go.back(-1)</script>';
+	}
 }

@@ -52,7 +52,7 @@ var $authentication;
 			$branch_id = $this->uri->segment(3);
 			$branches = new Branch;
 			$branches->where('id',$branch_id)->get();
-			$branches->simple_auth_user->get();
+			$branches->user->get();
 			$this->data['title']='<h1>Edit ' . $branches->name . ' branch</h1>';
 			$this->data['branch']=$branches;
 			$this->user->set_title('Edit  ' . $branches->name . ' branch');
@@ -95,29 +95,28 @@ var $authentication;
 	}
 	function add_user(){
 		if($this->authentication->is_authenticated()){
-			$users = new Simple_auth_user;
+			$users = new user;
 			$users->get();
 			$list = array();
 			foreach($users as $user){
 				array_push($list,array($user->id=>$user->username)) ;
 			}
-			$this->data['users']=$list;
-			$this->data['branch_id']=$this->uri->segment(3);
-			$this->user->set_title('Add User');
-			$this->user->set_pagetitle('Add User');
-			$this->user->set_navigator(array(array(
-				anchor('branches/users/' . $this->data['branch_id'],'User'),
-				anchor('branches','Back to Branches'),
-				anchor('front_page/logout','Logout'))));
 			$this->data['user']=$this->user;
-			$this->load->view('branches/add_user',$this->data);
+			$data	=	array(
+				'users'		=>	$list,
+				'branch_id'	=>	$this->uri->segment(3),
+				'navigator'	=>	array(array(
+					anchor('branches/users/' . $this->uri->segment(3),'User','class="button"'),
+					anchor('branches','Back to Branches','class="button"'),
+					anchor('front_page/logout','Logout','class="button"')				
+				))
+			);
+			$this->load->view('branches/add_user',$data);
 		}
 	}
 	function add_user_handler(){
 		$params = $this->input->post();
-		$user = new Simple_auth_user;
-
-
+		$user = new user;
 		$user->where('id',$params['user_id']);
 		$user->get();
 		$branch = new Branch;
@@ -129,20 +128,26 @@ var $authentication;
 	}
 	function show_clients(){
 		if($this->authentication->is_authenticated()){
-			$id=$this->uri->segment(3);
-			$per_page	=	10;
-			$page=$this->uri->segment(4);
-			$branches = new Branch;
+			$id			=	$this->uri->segment(3);
+			$page		=	$this->uri->segment(4);
+			$branches 	= 	new Branch;
 			$branches->where('id',$id);
 			$branches->get();
-			$clients=$branches->client;
-			$this->data['clients']	=	$clients;
-			$this->user->set_navigator(array(array(
-				anchor('/','Home','class="button"'),
-				anchor('branches','Back to Branches','class="button"'),
-				anchor('front_page/logout','Logout','class="button"'))));
-			$this->data['user']			=	$this->user;
-			$this->load->view('branches/show_clients',$this->data);
+			$clients	=	$branches->client->get(10,$page);
+			$list		=	array();
+			foreach($clients as $client){
+				array_push($list,array($client->id,$client->name));
+			}
+			$data	=	array(
+				'clients'	=>	$list,
+				'navigator'	=>	array(array(anchor('/','Home','class="button"'),anchor('branches','Branches','class="button"'),anchor('front_page/logout','Logout','class="button"')))
+			);
+			$this->pagination->initialize(array(
+				'base_url'	=>	base_url() . 'index.php/branches/show_clients/' . $id,
+				'total_rows'=>	$clients->count(),
+				'per_page'	=>	10
+				));
+			$this->load->view('branches/show_clients',$data);
 		}
 	}
 	function delete(){

@@ -28,22 +28,22 @@
 <input type='text' name='applicant' value='<?php echo $client->applicant?>' class='tableless_input' ></br>
 
 <label for='NO_FB' class='tableless_label'>FB</label>
-<input type='text' name='NO_FB' value='<?php echo $client->NO_FB?>' class='tableless_input' ></br>
+<input type='text' name='NO_FB' value='<?php echo $client->no_fb?>' class='tableless_input' ></br>
 
 <label for='fb_date' class='tableless_label'>FB Date</label>
 <input type='text' name='fb_date' value='<?php echo $client->fb_date?>' class='tableless_input' ></br>
 
 <label for='NO_ID' class='tableless_label'>ID Num</label>
-<input type='text' name='NO_ID' value='<?php echo $client->NO_ID?>' class='tableless_input' ></br>
+<input type='text' name='NO_ID' value='<?php echo $client->no_id?>' class='tableless_input' ></br>
 
 <label for='TELP_HP' class='tableless_label'>Telp HP</label>
-<input type='text' name='TELP_HP' value='<?php echo $client->TELP_HP?>' class='tableless_input' ></br>
+<input type='text' name='TELP_HP' value='<?php echo $client->telp_hp?>' class='tableless_input' ></br>
 
 <label for='HP' class='tableless_label'>HP</label>
-<input type='text' name='HP' value='<?php echo $client->HP?>' class='tableless_input' ></br>
+<input type='text' name='HP' value='<?php echo $client->hp?>' class='tableless_input' ></br>
 
 <label for='HP2' class='tableless_label'>HP2</label>
-<input type='text' name='HP2' value='<?php echo $client->HP2?>' class='tableless_input' ></br>
+<input type='text' name='HP2' value='<?php echo $client->hp2?>' class='tableless_input' ></br>
 
 <label for='email' class='tableless_label'>Email</label>
 <input type='text' name='email' value='<?php echo $client->email?>' class='tableless_input' ></br>
@@ -87,45 +87,45 @@ echo form_dropdown('business',$option,$client->business_field_id) . '<br>';
 
 
 <label for='SIUP' class='tableless_label'>SIUP</label>
-<input type='text' name='SIUP' value='<?php echo $client->SIUP?>' class='tableless_input' ></br>
+<input type='text' name='SIUP' value='<?php echo $client->siup?>' class='tableless_input' ></br>
 
 <label for='NPWP' class='tableless_label'>NPWP</label>
-<input type='text' name='NPWP' value='<?php echo $client->NPWP?>' class='tableless_input' ></br>
+<input type='text' name='NPWP' value='<?php echo $client->npwp?>' class='tableless_input' ></br>
 
-<label for='BIAYA_SETUP' class='tableless_label'>Setup Fee</label>
-<input type='text' name='BIAYA_SETUP' value='<?php echo $client->BIAYA_SETUP?>' class='tableless_input' ></br>
+<label for='setup_fee' class='tableless_label'>Setup Fee</label>
+<input type='text' name='setup_fee' value='<?php echo $client->setup_fee?>' class='tableless_input' ></br>
 
-<label for='BIAYA_BERLANGGANAN_BULANAN' class='tableless_label'>Monthly Fee</label>
-<input type='text' name='BIAYA_BERLANGGANAN_BULANAN' value='<?php echo $client->BIAYA_BERLANGGANAN_BULANAN?>' class='tableless_input' ></br>
+<label for='monthly_subscription_fee' class='tableless_label'>Monthly Fee</label>
+<input type='text' name='monthly_subscription_fee' value='<?php echo $client->monthly_subscription_fee?>' class='tableless_input' ></br>
 
-<label for='BIAYA_PERANGKAT' class='tableless_label'>Hardware Fee</label>
-<input type='text' name='BIAYA_PERANGKAT' value='<?php echo $client->BIAYA_PERANGKAT?>' class='tableless_input' ></br>
+<label for='device_fee' class='tableless_label'>Hardware Fee</label>
+<input type='text' name='device_fee' value='<?php echo $client->device_fee?>' class='tableless_input' ></br>
 
-<label for='BIAYA_LAINNYA' class='tableless_label'>Other Fee</label>
-<input type='text' name='BIAYA_LAINNYA' value='<?php echo $client->BIAYA_LAINNYA?>' class='tableless_input' ></br>
+<label for='other_fee' class='tableless_label'>Other Fee</label>
+<input type='text' name='other_fee' value='<?php echo $client->other_fee?>' class='tableless_input' ></br>
 
 
 </div><div id='service'>
 
-<label for='KODE_PELANGGAN' class='tableless_label'>Client Code</label>
-<input type='text' name='KODE_PELANGGAN' value='<?php echo $client->KODE_PELANGGAN?>' class='tableless_input' ></br>
-<label for='KETERANGAN_LAYANAN' class='tableless_label'>Service Desc</label>
-<input type='text' name='KETERANGAN_LAYANAN' value='<?php echo $client->KETERANGAN_LAYANAN?>' class='tableless_input' ></br>
+<label for='kode_pelanggan' class='tableless_label'>Client Code</label>
+<input type='text' name='kode_pelanggan' value='<?php echo $client->kode_pelanggan?>' class='tableless_input' ></br>
+<label for='service_information' class='tableless_label'>Service Desc</label>
+<input type='text' name='service_information' value='<?php echo $client->service_information?>' class='tableless_input' ></br>
 
 <label for='activation_date' class='tableless_label'>Activation Date</label>
 <input type='text' name='activation_date' value='<?php echo $client->activation_date?>' class='tableless_input' ></br>
 
-<label for='PERIODE_LANGGANAN' class='tableless_label'>Date Period</label>
-<input type='text' name='PERIODE_LANGGANAN' value='<?php echo $client->PERIODE_LANGGANAN?>' class='tableless_input' ></br>
+<label for='subscription_period' class='tableless_label'>Date Period</label>
+<input type='text' name='subscription_period' value='<?php echo $client->subscription_period?>' class='tableless_input' ></br>
 
-<label for='REQUEST_KHUSUS' class='tableless_label'>Special Request</label>
-<input type='text' name='REQUEST_KHUSUS' value='<?php echo $client->REQUEST_KHUSUS?>' class='tableless_input' ></br>
+<label for='special_request' class='tableless_label'>Special Request</label>
+<input type='text' name='special_request' value='<?php echo $client->special_request?>' class='tableless_input' ></br>
 
-<label for='ACCOUNT_MANAGER' class='tableless_label'>Account Manager</label>
-<input type='text' name='ACCOUNT_MANAGER' value='<?php echo $client->ACCOUNT_MANAGER?>' class='tableless_input' ></br>
+<label for='account_manager' class='tableless_label'>Account Manager</label>
+<input type='text' name='account_manager' value='<?php echo $client->account_manager?>' class='tableless_input' ></br>
 
-<label for='STATUS' class='tableless_label'>Status</label>
-<input type='text' name='STATUS' value='<?php echo $client->STATUS?>' class='tableless_input' ></br>
+<label for='status' class='tableless_label'>status</label>
+<input type='text' name='status' value='<?php echo $client->status?>' class='tableless_input' ></br>
 
 <label for='tanggal' class='tableless_label'>Date</label>
 <input type='text' name='tanggal' value='<?php echo $client->tanggal?>' class='tableless_input' ></br>

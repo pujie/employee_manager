@@ -1,7 +1,7 @@
 <?php
 class Branch extends DataMapper{
 var $obj;
-var $has_many = array('simple_auth_user','client');
+var $has_many = array('user','client');
 var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
@@ -24,14 +24,14 @@ var $pagination_attributes;
 		return $list;
 	}
 	function get_user_count(){
-		return $this->simple_auth_user->count();
+		return $this->user->count();
 	}
 	function get_user_list(){
 		$list=array();
 		$this->where('id',1)->get();		
 		$this->get();
-		$this->simple_auth_user->get();
-		foreach($this->simple_auth_user as $user){
+		$this->user->get();
+		foreach($this->user as $user){
 			array_push($list,array($user->id,humanize($user->username),anchor('branches/delete','Delete','class="table_button"')));
 		}
 		return $list;

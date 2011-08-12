@@ -71,7 +71,7 @@
 	$categories->get();
 	$option=array();
 	foreach($categories as $category){
-		$option[$category->id]	=	$category->KATEGORI;
+		$option[$category->id]	=	$category->kategori;
 	}
 	echo form_dropdown('category',$option,1,'id="category_id" name="category_id" class="tableless_input"') . '<br>';
 	echo form_label('Service','service_id',$label);
@@ -80,35 +80,35 @@
 	$services->get();
 	$option=array();
 	foreach($services as $service){
-		$option[$service->id]	=	$service->LAYANAN;
+		$option[$service->id]	=	$service->layanan;
 	}
 	echo form_dropdown('service',$option,'id="category_id" name="category_id" class="tableless_input"') . '<br>';
-	echo form_label('Other','LAINNYA',$label);
-	$LAINNYA=array('name'=>'LAINNYA','id'=>'LAINNYA','class'=>'tableless_input');
-	echo form_input($LAINNYA) . '<br>';
+	echo form_label('Other','lainnya',$label);
+	$lainnya=array('name'=>'lainnya','id'=>'lainnya','class'=>'tableless_input');
+	echo form_input($lainnya) . '<br>';
 
-	echo form_label('SIUP','SIUP',$label);
-	$SIUP=array('name'=>'SIUP','id'=>'SIUP','class'=>'tableless_input');
-	echo form_input($SIUP) . '<br>';
-	echo form_label('NPWP','NPWP',$label);
-	$NPWP=array('name'=>'NPWP','id'=>'NPWP','class'=>'tableless_input');
-	echo form_input($NPWP) . '<br>';
-	echo form_label('Setup Fee','BIAYA_SETUP',$label);
-	$BIAYA_SETUP=array('name'=>'BIAYA_SETUP','id'=>'BIAYA_SETUP','class'=>'tableless_input');
-	echo form_input($BIAYA_SETUP) . '<br>';
-	echo form_label('Monthly Fee','BIAYA_BERLANGGANAN_BULANAN',$label);
-	$BIAYA_BERLANGGANAN_BULANAN=array('name'=>'BIAYA_BERLANGGANAN_BULANAN','id'=>'BIAYA_BERLANGGANAN_BULANAN','class'=>'tableless_input');
-	echo form_input($BIAYA_BERLANGGANAN_BULANAN) . '<br>';
+	echo form_label('siup','siup',$label);
+	$siup=array('name'=>'siup','id'=>'siup','class'=>'tableless_input');
+	echo form_input($siup) . '<br>';
+	echo form_label('NPWP','npwp',$label);
+	$npwp=array('name'=>'npwp','id'=>'npwp','class'=>'tableless_input');
+	echo form_input($npwp) . '<br>';
+	echo form_label('Setup Fee','setup_fee',$label);
+	$setup_fee=array('name'=>'setup_fee','id'=>'setup_fee','class'=>'tableless_input');
+	echo form_input($setup_fee) . '<br>';
+	echo form_label('Monthly Fee','monthly_subscription_fee',$label);
+	$monthly_subscription_fee=array('name'=>'monthly_subscription_fee','id'=>'monthly_subscription_fee','class'=>'tableless_input');
+	echo form_input($monthly_subscription_fee) . '<br>';
 
-	echo form_label('Device Fee','BIAYA_PERANGKAT',$label);
-	$BIAYA_PERANGKAT=array('name'=>'BIAYA_PERANGKAT','id'=>'BIAYA_PERANGKAT','class'=>'tableless_input');
-	echo form_input('BIAYA_PERANGKAT') . '<br>';
-	echo form_label('Other Fee','BIAYA_LAINNYA',$label);
-	$BIAYA_LAINNYA=array('name'=>'BIAYA_LAINNYA','id'=>'BIAYA_LAINNYA','class'=>'tableless_input');
-	echo form_input($BIAYA_LAINNYA) . '<br>';
-	echo form_label('Service Desc','KETERANGAN_LAYANAN',$label);
-	$KETERANGAN_LAYANAN=array('name'=>'KETERANGAN_LAYANAN','id'=>'KETERANGAN_LAYANAN','class'=>'tableless_input');
-	echo form_input($KETERANGAN_LAYANAN) . '<br>';
+	echo form_label('Device Fee','device_fee',$label);
+	$device_fee=array('name'=>'device_fee','id'=>'device_fee','class'=>'tableless_input');
+	echo form_input('device_fee') . '<br>';
+	echo form_label('Other Fee','other_fee',$label);
+	$other_fee=array('name'=>'other_fee','id'=>'other_fee','class'=>'tableless_input');
+	echo form_input($other_fee) . '<br>';
+	echo form_label('Service Desc','service_information',$label);
+	$service_information=array('name'=>'service_information','id'=>'service_information','class'=>'tableless_input');
+	echo form_input($service_information) . '<br>';
 	?>
 </div><div id='service'>
 <?php
@@ -125,12 +125,12 @@
 	echo form_label('Activation Date','activation_date',$label);
 	$activation_date=array('name'=>'activation_date','id'=>'activation_date','class'=>'tableless_input');
 	echo form_input($activation_date) . '<br>';
-	echo form_label('Period','PERIODE_LANGGANAN',$label);
-	$PERIODE_LANGGANAN=array('name'=>'PERIODE_LANGGANAN','id'=>'PERIODE_LANGGANAN','class'=>'tableless_input');
-	echo form_input($PERIODE_LANGGANAN) . '<br>';
-	echo form_label('Special Request','REQUEST_KHUSUS',$label);
-	$REQUEST_KHUSUS=array('name'=>'REQUEST_KHUSUS','id'=>'REQUEST_KHUSUS','class'=>'tableless_input');
-	echo form_input($REQUEST_KHUSUS) . '<br>';
+	echo form_label('Period','subscription_period',$label);
+	$subscription_period=array('name'=>'subscription_period','id'=>'subscription_period','class'=>'tableless_input');
+	echo form_input($subscription_period) . '<br>';
+	echo form_label('Special Request','special_request',$label);
+	$special_request=array('name'=>'special_request','id'=>'special_request','class'=>'tableless_input');
+	echo form_input($special_request) . '<br>';
 	echo form_label('Account Manager','ACCOUNT_MANAGER',$label);
 	$ACCOUNT_MANAGER=array('name'=>'ACCOUNT_MANAGER','id'=>'ACCOUNT_MANAGER','class'=>'tableless_input');
 	echo form_input($ACCOUNT_MANAGER) . '<br>';

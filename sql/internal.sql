@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 11, 2011 at 05:58 PM
+-- Generation Time: Aug 12, 2011 at 05:57 PM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -45,15 +45,17 @@ INSERT INTO `branches` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `branches_simple_auth_users`
+-- Table structure for table `branches_users`
 --
 
-CREATE TABLE IF NOT EXISTS `branches_simple_auth_users` (
+CREATE TABLE IF NOT EXISTS `branches_users` (
   `branch_id` int(11) NOT NULL,
-  `simple_auth_user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
+--
+-- Dumping data for table `branches_users`
+--
 
 -- --------------------------------------------------------
 
@@ -65,83 +67,8 @@ CREATE TABLE IF NOT EXISTS `business_fields` (
   `name` varchar(200) NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=72 ;
 
---
--- Dumping data for table `business_fields`
---
-
-INSERT INTO `business_fields` (`name`, `id`) VALUES
-('Jasa Pendidikan', 1),
-('Rumah Sakit', 2),
-('Marketer and Distributor of Healtcare & Consumer Goods', 3),
-('Apartemen', 4),
-('', 5),
-('Perusahaan Jasa Tenaga Kerja Indonesia', 6),
-('Game on line', 7),
-('Multiplayer Game', 8),
-('Supermarket', 9),
-('Karet', 10),
-('Cafe', 11),
-('Pialang Bursa Berjangka', 12),
-('Personal', 13),
-('Perbankan', 14),
-('Elektronik Retail', 15),
-('Konstruksi', 16),
-('Jasa Survey dan Mapping', 17),
-('Supplier alat kantor', 18),
-('Perhotelan', 19),
-('Jasa Penunjang Hiburan', 20),
-('Medical Suplier', 21),
-('Jasa Angkutan', 22),
-('Perorangan', 23),
-('perdagangan Barang', 24),
-('Machinery', 25),
-('Corporate', 26),
-('Gereja', 27),
-('Perdagangan BarangTeknik', 28),
-('Kontraktor', 29),
-('Perdagangan Elektronik', 30),
-('Export - Import', 31),
-('Jasa Sistem Komunikasi', 32),
-('Manufaktur', 33),
-('Wood Manufacturing', 34),
-('Exportir, Manufacturer', 35),
-('Perseorangan', 36),
-('Franchise Bakso Kepala Sapi', 37),
-('Jasa Perjalanan Wisata', 38),
-('Perdagangan', 39),
-('Jasa Periklanan', 40),
-('Jasa', 41),
-('Distributor elektronik', 42),
-('IT Integrator', 43),
-('Content Provider', 44),
-('Kertas Industri, buku tulis', 45),
-('Hotel/Hospitaly', 46),
-('Pelayaran/cargo', 47),
-('Industri', 48),
-('Trading', 49),
-('Manufactur', 50),
-('Security system', 51),
-('Developer real estate', 52),
-('Autorizhed Dealler Indosat', 53),
-('Resto', 54),
-('Internet Service Provider', 55),
-('Variasi velg', 56),
-('Lembaga Pendidikan', 57),
-('Sekolah', 58),
-('Export Import ProdukPertanian', 59),
-('Pabrik Kertas', 60),
-('Perdagangan barang dan jasa', 61),
-('Jasa Konstruksi dan Manufaktur', 62),
-('Universitas', 63),
-('Warnet', 64),
-('Manufactured', 65),
-('Edukasi', 66),
-('Akademik', 67),
-('Finance Sekuritas', 68),
-('Perusahaan', 69),
-('Pulsa Online', 70);
 
 -- --------------------------------------------------------
 
@@ -151,16 +78,15 @@ INSERT INTO `business_fields` (`name`, `id`) VALUES
 
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `SINGKATAN` char(1) NOT NULL,
-  `KATEGORI` varchar(100) NOT NULL,
-  `STATUS` enum('0','1') NOT NULL,
+  `singkatan` char(1) NOT NULL,
+  `kategori` varchar(100) NOT NULL,
+  `status` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `categories`
 --
-
 
 -- --------------------------------------------------------
 
@@ -182,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-('963720f29b2b07748793aed763a016be', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/', 1313056389, 'a:4:{s:2:"id";s:1:"1";s:8:"username";s:5:"pujie";s:5:"email";s:14:"pujie@padi.net";s:4:"salt";s:40:"a6e5230560ae5b8b39ff38dbacbf860d2bf56b42";}');
+('9568e05a31937fea4236b47eea6c414c', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/', 1313142601, 'a:5:{s:2:"id";s:1:"1";s:8:"username";s:5:"pujie";s:5:"email";s:14:"pujie@padi.net";s:4:"salt";s:40:"a6e5230560ae5b8b39ff38dbacbf860d2bf56b42";s:11:"current_url";s:63:"http://localhost:8080/store/internal2/index.php/business_fields";}');
 
 -- --------------------------------------------------------
 
@@ -198,35 +124,38 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `business_field_id` int(11) DEFAULT NULL,
   `lainnya` varchar(100) NOT NULL DEFAULT '',
   `name` varchar(200) NOT NULL DEFAULT '',
-  `SIUP` varchar(200) NOT NULL DEFAULT '',
-  `NPWP` varchar(200) NOT NULL DEFAULT '',
+  `siup` varchar(200) NOT NULL DEFAULT '',
+  `npwp` varchar(200) NOT NULL DEFAULT '',
   `address` varchar(255) NOT NULL DEFAULT '',
   `telp` varchar(15) DEFAULT NULL,
   `fax` varchar(15) DEFAULT NULL,
   `applicant` varchar(200) DEFAULT NULL,
-  `NO_FB` varchar(20) DEFAULT NULL,
+  `no_fb` varchar(20) DEFAULT NULL,
   `fb_date` date DEFAULT NULL,
-  `NO_ID` varchar(150) NOT NULL DEFAULT '',
-  `TELP_HP` varchar(50) DEFAULT '',
-  `HP` varchar(13) DEFAULT NULL,
-  `HP2` varchar(13) DEFAULT NULL,
+  `no_id` varchar(150) NOT NULL DEFAULT '',
+  `telp_hp` varchar(50) DEFAULT NULL,
+  `hp` varchar(13) DEFAULT NULL,
+  `hp2` varchar(13) DEFAULT NULL,
   `email` varchar(150) DEFAULT NULL,
-  `BIAYA_SETUP` double DEFAULT NULL,
-  `BIAYA_BERLANGGANAN_BULANAN` double DEFAULT NULL,
-  `BIAYA_PERANGKAT` double DEFAULT NULL,
-  `BIAYA_LAINNYA` double DEFAULT NULL,
-  `KETERANGAN_LAYANAN` tinytext,
+  `setup_fee` double DEFAULT NULL,
+  `monthly_subscription_fee` double DEFAULT NULL,
+  `device_fee` double DEFAULT NULL,
+  `other_fee` double DEFAULT NULL,
+  `service_information` tinytext,
   `activation_date` date DEFAULT NULL,
-  `PERIODE_LANGGANAN` date DEFAULT NULL,
-  `REQUEST_KHUSUS` tinytext,
-  `ACCOUNT_MANAGER` char(13) DEFAULT NULL,
-  `STATUS` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '0 = non aktif 1 = aktif 2 = mantan client',
+  `subscription_period` date DEFAULT NULL,
+  `special_request` tinytext,
+  `account_manager` char(13) DEFAULT NULL,
+  `status` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '0 = non aktif 1 = aktif 2 = mantan client',
   `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `KODE_PELANGGAN` varchar(30) NOT NULL,
+  `kode_pelanggan` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `IDX_KODE_PELANGGAN` (`KODE_PELANGGAN`)
+  UNIQUE KEY `IDX_KODE_PELANGGAN` (`kode_pelanggan`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=754 ;
 
+--
+-- Dumping data for table `clients`
+--
 
 
 -- --------------------------------------------------------
@@ -253,18 +182,42 @@ INSERT INTO `modules` (`id`, `name`, `url`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `modules_simple_auth_users`
+-- Table structure for table `modules_users`
 --
 
-CREATE TABLE IF NOT EXISTS `modules_simple_auth_users` (
+CREATE TABLE IF NOT EXISTS `modules_users` (
   `module_id` int(11) NOT NULL,
-  `simple_auth_user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `modules_simple_auth_users`
+-- Dumping data for table `modules_users`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `obsolete_table_users`
+--
+
+CREATE TABLE IF NOT EXISTS `obsolete_table_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(40) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `ALIAS` varchar(50) NOT NULL,
+  `TANGGAL` datetime NOT NULL,
+  `LOGIN_AKHIR` datetime NOT NULL,
+  `STATUS` enum('0','1') NOT NULL DEFAULT '0',
+  `ONLINE` enum('0','1') NOT NULL DEFAULT '0',
+  `ID_LEVEL` int(11) NOT NULL,
+  `AM` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USERNAME` (`username`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+
+--
+-- Dumping data for table `obsolete_table_users`
+--
 
 -- --------------------------------------------------------
 
@@ -283,7 +236,6 @@ CREATE TABLE IF NOT EXISTS `product` (
 -- Dumping data for table `product`
 --
 
-
 -- --------------------------------------------------------
 
 --
@@ -292,14 +244,17 @@ CREATE TABLE IF NOT EXISTS `product` (
 
 CREATE TABLE IF NOT EXISTS `services` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `SINGKATAN` char(4) NOT NULL,
-  `LAYANAN` varchar(100) NOT NULL,
-  `USERNAME` varchar(30) NOT NULL,
-  `TGL` date NOT NULL,
-  `STATUS` enum('0','1') NOT NULL,
+  `singkatan` char(4) NOT NULL,
+  `layanan` varchar(100) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `tgl` date NOT NULL,
+  `status` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
 
+--
+-- Dumping data for table `services`
+--
 
 -- --------------------------------------------------------
 
@@ -313,29 +268,6 @@ CREATE TABLE IF NOT EXISTS `simple_auth_passwd_request` (
   `request_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `simple_auth_users`
---
-
-CREATE TABLE IF NOT EXISTS `simple_auth_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(40) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(40) NOT NULL,
-  `salt` varchar(40) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
-
---
--- Dumping data for table `simple_auth_users`
---
-
-INSERT INTO `simple_auth_users` (`id`, `username`, `email`, `password`, `salt`, `status`) VALUES
-(1, 'pujie', 'pujie@padi.net', 'c11926cf527f8553e8b9c56ec0e5c8de83696d48', 'a6e5230560ae5b8b39ff38dbacbf860d2bf56b42', 1),
 
 -- --------------------------------------------------------
 
@@ -355,6 +287,10 @@ CREATE TABLE IF NOT EXISTS `tb_hub_pelanggan` (
   `URUTAN` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tb_hub_pelanggan`
+--
+
 
 -- --------------------------------------------------------
 
@@ -363,19 +299,13 @@ CREATE TABLE IF NOT EXISTS `tb_hub_pelanggan` (
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL DEFAULT '0',
   `username` varchar(40) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `password` varchar(40) NOT NULL,
-  `ALIAS` varchar(50) NOT NULL,
-  `TANGGAL` datetime NOT NULL,
-  `LOGIN_AKHIR` datetime NOT NULL,
-  `STATUS` enum('0','1') NOT NULL DEFAULT '0',
-  `ONLINE` enum('0','1') NOT NULL DEFAULT '0',
-  `ID_LEVEL` int(11) NOT NULL,
-  `AM` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `USERNAME` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  `salt` varchar(40) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`

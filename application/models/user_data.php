@@ -8,7 +8,7 @@ var $navigator;
 	function __construct(){
 		parent::__construct();
 		$this->obj	=	& get_instance();
-		$this->current_user=new Simple_auth_user;
+		$this->current_user=new User;
 		$this->current_user->where('id',$this->obj->session->userdata['id']);
 		$this->current_user->get();
 	}
