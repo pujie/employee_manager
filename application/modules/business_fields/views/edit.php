@@ -1,6 +1,6 @@
 <?php
 $this->load->view('common/header');
-echo form_open('business_fields/edit_handler');
+echo form_open('business_fields/edit_handler/' . $id);
 echo form_hidden('id',$fields->id);
 echo form_label('business field','name');
 echo form_input('name',$fields->name) . '<br>';

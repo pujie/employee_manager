@@ -18,6 +18,7 @@ var $user;
 			anchor('app_modules','Modules','class="button"'),
 			anchor('users/index','Users','class="button"'),
 			anchor('branches','Branches','class="button"'),
+			anchor('business_fields','Business Fields','class="button"'),
 			anchor('front_page/logout','Logout','class="button"'))));
 
 		$this->data['user']	=	$this->user;

@@ -1,7 +1,7 @@
 <?php
 $this->load->view('common/header');
 echo $title;
-echo form_open('simple_auth_users/add_handler');
+echo form_open('users/add_handler');
 echo form_label('Name','name',$name_label); 
 echo form_input($name ) . '<br>';
 echo form_label('Email','password',$email_label);
