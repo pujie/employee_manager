@@ -15,6 +15,8 @@
 	$this->lib_table->set_alignment(4,'center');
 	$this->lib_table->set_alignment(5,'center');
 	$this->lib_table->set_alignment(6,'center');
-	echo $this->lib_table->set_table('client',$head,$users->get_user_list());
+	echo $this->lib_table->set_table('client',$head,$list);
+	$this->pagination->initialize($pagination);
+	echo 'Goto Page ' . $this->pagination->create_links();
 	$this->lib_table_manager->create_table($user->get_navigator());
 	$this->load->view('common/footer');

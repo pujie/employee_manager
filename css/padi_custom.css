@@ -1,3 +1,38 @@
+﻿* {
+padding: 0;
+margin: 0;
+}
+body {
+font-family: "lucida sans", verdana, arial, helvetica, sans-serif;
+font-size: 75%;
+}
+h1 {
+font-size: 1.4em;
+padding: 10px 10px 0;
+}
+p {
+padding: 0 10px 1em;
+}
+html, body {
+height: 100%;
+}
+#container{
+min-height: 100%;
+background-color: #DDD;
+border-left: 2px solid #666;
+border-right: 2px solid #666;
+width: 100%px;
+margin: 0 auto;
+}
+#footer{
+width: 100%;
+background-color: #000;
+color: #DDD;
+text-align: center;
+height: 70px;
+padding-top: 10px;
+margin: -50px auto 0 auto;
+}
 .pagination a{
 	height: 15px;
 	font-size:8px;

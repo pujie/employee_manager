@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','datamapper','session','simple_auth','
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url','form');
+$autoload['helper'] = array('url','form','date');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('user','general');
+$autoload['model'] = array('user','general','activity_log');
 
 
 /* End of file autoload.php */

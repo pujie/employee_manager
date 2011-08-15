@@ -1,8 +1,7 @@
 <?php
 class User extends DataMapper{
 var $navigator;
-	// var $has_one = array('user');
-	var $has_many = array('module','branch');
+	var $has_many = array('module','branch','activity_log');
 	function __construct(){
 		parent::__construct();
 	}

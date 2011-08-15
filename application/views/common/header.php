@@ -21,5 +21,6 @@
     </head>
 	
 	<body>
-	<img src="<?php echo base_url();?>media/logo.jpg" />
-		<div id="wrapper">
+<!--		<div id="wrapper"> -->
+		<div id="container">
+			<img src="<?php echo base_url();?>media/logo.jpg" />
