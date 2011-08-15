@@ -7,6 +7,8 @@ $(document).ready(function(){
 	{
 	'buttons':{'Yes':function()
 		{
+			alert('<?php echo base_url();?>');
+			// parent.location='';
 			$(this).dialog('close');
 		},
 		'No':function()

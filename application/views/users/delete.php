@@ -7,7 +7,7 @@ $(document).ready(function(){
 	{
 	'buttons':{'Yes':function()
 		{
-			parent.location	=	'http://localhost:8080/store/internal2/index.php/users';
+			window.location	=	'<?php echo base_url(); ?>' + 'index.php/users/delete_handler/' + '<?php echo $id;?>';
 		},
 		'No':function()
 		{
@@ -23,9 +23,9 @@ Are you sure want to delete this user ?
 </div>
 
 <?php
-	$user	=	new User;
-	$user->where('id',$this->uri->segment(3))->get();
-	$user->delete();
-	redirect('Users');
+	// $user	=	new User;
+	// $user->where('id',$this->uri->segment(3))->get();
+	// $user->delete();
+	// redirect('Users');
 	$this->load->view('common/footer');
 ?>
