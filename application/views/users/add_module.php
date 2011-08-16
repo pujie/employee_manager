@@ -1,5 +1,6 @@
 <?php
-$this->load->view('common/header');
+$header_data=array('username'=>$user_data->get_user());
+$this->load->view('common/header',$header_data);
 echo $title;
 echo form_open('users/add_module_handler');
 echo form_hidden('id',$this->uri->segment(3));
@@ -13,4 +14,5 @@ echo $this->lib_table->set_table('module',$head,$list);
 echo '<br>' . form_submit('save','Save');
 echo form_close();
 echo $this->lib_table_manager->create_table($user_data->get_navigator());
-$this->load->view('common/footer');
+$footer_data=array('navigator'=>$user_data->get_navigator());
+$this->load->view('common/footer',$footer_data);

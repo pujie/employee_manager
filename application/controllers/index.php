@@ -4,11 +4,7 @@ var $user_data;
 var $data;
 	function __construct(){
 		parent::__construct();
-		$this->load->library('menu');
-		$this->load->model('general');
 		$this->config->load('padi_config');
-		$this->load->model('user_data');
-		$this->load->library('lib_table_manager');
 	}
 	function index(){
 		if($this->simple_auth->is_logged_in()){
@@ -27,7 +23,7 @@ var $data;
 				anchor('front_page/logout','Logout','class="button"'));
 			$navigator=array_merge(array(anchor('/','Home','class="button"')),$links[0],array(anchor('front_page/logout','Logout','class="button"')));
 			$this->user_data->set_navigator(array($navigator));
-			$this->data['user_data']=$this->data;
+			$this->data['user_data']=$this->user_data;
 			$this->load->view('index',$this->data);
 		}
 		else{

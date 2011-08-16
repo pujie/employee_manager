@@ -1,5 +1,6 @@
 <?php
-	$this->load->view('common/header');
+	$header_data=array('username'=>$user_data->get_user());
+	$this->load->view('common/header',$header_data);
 ?>
 <script type='text/javascript'>
 	$(document).ready(function(){
@@ -143,10 +144,14 @@
 	echo form_label('Client Code','KODE_PELANGGAN',$label);
 	$KODE_PELANGGAN=array('name'=>'KODE_PELANGGAN','id'=>'KODE_PELANGGAN','class'=>'tableless_input');
 	echo form_input($KODE_PELANGGAN) . '<br>';
-	echo form_submit('Save','save');
 	?>
-	</div></div>
+	</div>
 	<?php
-	$this->lib_table_manager->create_table($this->user_data->get_navigator());
+		echo form_submit('Save','save');
+	?>
+	</div>
+	<?php
+	// $this->lib_table_manager->create_table($this->user_data->get_navigator());
+	$footer_data=array('navigator'=>$navigator);
 	$this->load->view('common/footer');
 ?>

@@ -2,7 +2,7 @@
 class Clients extends CI_Controller{
 var $data;
 var $authentication;
-var $head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
+// var $head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
@@ -60,13 +60,13 @@ var $pagination_attributes;
 						$client->name, 
 						$client->branch->name, 
 						$client->category->kategori, 
-						$client->service->LAYANAN,
+						$client->service->layanan,
 						anchor('clients/edit/' . $client->id . '?last_url=' . current_url(),'Edit','class="table_button"')
 					)
 				);
 			}
 			$form_array	=	array(
-				'head'=>$this->head,
+				'row_count'=>$clients->count(),
 				'body'=>$body,
 				'current_url'=> current_url()
 			);
@@ -87,10 +87,14 @@ var $pagination_attributes;
 	
 	function add(){
 		if($this->authentication->is_authenticated()){
+			$user_data=new User_data;
 			$fields=$this->db->list_fields('clients');
 			$this->data['fields']=$fields;
-			$this->user_data->set_navigator(array(array(anchor('/','Home','class="button"'),anchor('clients','Back to Clients','class="button"'),anchor('front_page/logout','Logout','class="button"'))));
-			$this->load->view('add',$this->data);
+			$data=array(
+				'fields'=>$fields,
+				'user_data'=>$user_data, 
+			'navigator'=>array(array(anchor('/','Home','class="button"'),anchor('clients','Back to Clients','class="button"'),anchor('front_page/logout','Logout','class="button"'))));
+			$this->load->view('add',$data);
 		}
 	}
 	function add_handler(){

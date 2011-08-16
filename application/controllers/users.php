@@ -24,7 +24,6 @@ var $current_url;
 			);
 			$users->get(10,$this->uri->segment(3));
 			$pagination=array('base_url'=>base_url() . 'index.php/users/index','per_page'=>'10','total_rows'=>$users->count());
-			$this->data['pagination']=$pagination;
 			$navigator=array(
 				anchor('/','Home','class="button"'),
 				anchor('users/add','Add User','class="button"'),
@@ -36,32 +35,39 @@ var $current_url;
 		foreach($users as $user){
 			array_push($list,array($user->id,
 				$user->username,$user->email,
+				anchor('users/show_modules/' . $user->id,'Modules','class="table_button"'),
+				anchor('users/show_branches/' . $user->id,'Branches','class="table_button"'),
 				anchor('users/edit/' . $user->id,'Edit','class="table_button"'),
 				anchor('users/delete/' . $user->id,'Delete','class="table_button"'),
-				anchor('users/show_modules/' . $user->id,'Modules','class="table_button"'),
-				anchor('users/show_branches/' . $user->id,'Branches','class="table_button"')));
+				)
+			);
 		}
 			$this->user->set_pagetitle('User List');
 			$this->user->set_title('User List');
 			$this->user->set_navigator(array($navigator));
-			$data=array('list'=>$list,'pagination'=>$pagination,'user'=>$this->user,'users'=>$users);
+			$data=array('list'=>$list,'pagination'=>$pagination,'user_data'=>$this->user,'users'=>$users);
 			$this->data=array_merge($form_array,$this->data);
 			$this->load->view('users/index',$data);
 		}
 	}
 	function add(){
 		if($this->authentication->is_authenticated()){
-			$form_array=array(
+		$user_data=new User_data;
+			$data=array(
+				'user_data'		=>	$user_data,
 				'name_label'	=>	array('class'=>'tableless_login_label','name'=>'namelabel'),
 				'name'			=>	array('class'=>'tableless_login_input','name'=>'username'),
 				'email_label'	=>	array('class'=>'tableless_login_label','name'=>'passlabel'),
 				'email'			=>	array('class'=>'tableless_login_input','name'=>'email'),
 				'pass_label'	=>	array('class'=>'tableless_login_label','name'=>'passlabel'),
 				'password'		=>	array('class'=>'tableless_login_input','name'=>'userpassword'),
-				'title'			=>	'<h1>Add New User</h1>'
+				'title'			=>	'<h1>Add New User</h1>',
+				'navigator'=>array(array(
+					anchor('/','Home','class="button"'),
+					anchor('users','Users','class="button"'),
+					anchor('front_page/logout','Logout','class="button"')))
 			);
-			$this->data		=	array_merge($form_array,$this->data);
-			$this->load->view('users/add',$this->data);
+			$this->load->view('users/add',$data);
 		}
 	}
 	function add_handler(){
@@ -77,6 +83,7 @@ var $current_url;
 	function edit(){
 		if($this->authentication->is_authenticated()){
 			$id = $this->uri->segment(3);
+			$user_data=new User_data;
 			$user = new user;
 			$user->where('id',$id);
 			$user->get();
@@ -84,7 +91,7 @@ var $current_url;
 				anchor('/','Home','class="button"'),
 				anchor('users','Back to Users','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))));
-			$form_array=array(
+			$data=array(
 				'userbefore' => array(
 						  'name'        => 'username',
 						  'id'          => 'username',
@@ -110,10 +117,11 @@ var $current_url;
 						  'style'       => 'width:250',
 						),
 				'id'		=> $id,
-				'title' 	=> '<h1>Edit User</h1>'
+				'title' 	=> '<h1>Edit User</h1>',
+				'user_data'	=>	$user_data,
 			);
-			$this->data	=	array_merge($form_array,$this->data);
-			$this->load->view('users/edit',$this->data);
+			// $this->data	=	array_merge($form_array,$this->data);
+			$this->load->view('users/edit',$data);
 		}
 	}
 	function edit_handler(){
@@ -145,7 +153,7 @@ var $current_url;
 			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
 			$form_array	=	array(
 				'module_user'		=>	$module_user,
-				'user'				=>	$this->user
+				'user_data'			=>	$this->user
 			);
 			$this->data	=	array_merge($form_array,$this->data);
 			$this->load->view('users/show_modules',$this->data);
@@ -156,13 +164,7 @@ var $current_url;
 			$user=new user;
 			$user->where('id',$this->uri->segment(3));
 			$user->get();
-			$form_array	=	array(
-				'title'		=>	'<h1>Add ' . humanize($user->username) . '\'s Module</h1>',
-				'user'		=>	$user,
-				'user'		=>	$user,
-				'user_data'	=>	$this->user,
-				'modules'	=>	$module_available
-			);
+
 			$this->user->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
 				anchor('users','Back to Users','class="button"'),
@@ -174,6 +176,13 @@ var $current_url;
 			$module_available	=	new Module;
 			$module_available->where_not_in('name',$user_module->name);
 			$module_available->get();
+			$form_array	=	array(
+				'title'		=>	'<h1>Add ' . humanize($user->username) . '\'s Module</h1>',
+				'user'		=>	$user,
+				'user'		=>	$user,
+				'user_data'	=>	$this->user,
+				'modules'	=>	$module_available
+			);
 			$this->data			=	array_merge($form_array,$this->data);
 			$this->load->view('users/add_module',$this->data);
 		}
@@ -208,7 +217,7 @@ var $current_url;
 				anchor('front_page/logout','Logout','class="button"'))));
 			$form_array	=	array(
 				'branch_user'	=>	$branch_user,
-				'user'			=> 	$this->user
+				'user_data'			=> 	$this->user
 			);
 			$this->data	=	array_merge($form_array,$this->data);
 			$this->load->view('users/branches',$this->data);

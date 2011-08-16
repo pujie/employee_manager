@@ -1,7 +1,6 @@
 <?php
-$this->load->view('common/header');
+$header_data=array('username'=>humanize($user->get_user()));
+$this->load->view('common/header',$header_data);
 echo $user->get_title();
-echo 'Hello .. ' . humanize($user->get_user());
-echo $this->lib_raw_menu->create_menu($user->get_navigator());
-// echo $this->menu->links($user->get_links());
-$this->load->view('common/footer');
+$footerdata=array('navigator'=>$user->get_navigator());
+$this->load->view('common/footer',$footerdata);

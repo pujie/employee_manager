@@ -9,12 +9,14 @@ class Business_fields extends CI_Controller{
 		$my_session	=	array(
 			'current_url'	=>	current_url()
 		);
+		$user_data=new User_data;
 		$this->session->set_userdata($my_session);
 		$business_fields	=	new Business_field();
 		$business_fields->get(10,$this->uri->segment(3));
 		$list	=	array();
 		foreach($business_fields as $field){
 		array_push($list,array(
+			$field->id,
 			$field->name,
 			anchor('business_fields/edit/' . $field->id,'Edit','class="button"'),
 			anchor('business_fields/delete/' . $this->uri->segment(3) . '/' . $field->id,'Delete','class="button"')));
@@ -29,13 +31,16 @@ class Business_fields extends CI_Controller{
 			'fields'		=>	$list,
 			'navigator'		=>	array(array(
 				anchor('/','Home','class="button"'),
+				anchor('administrator','Administrator','class="button"'),
 				anchor('business_fields/add/' . $this->uri->segment(3),'Add','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))),
+				'user_data'=>$user_data
 		);
 		$this->load->view('index',$data);
 	}
 	function edit(){
 		$last_url	= $this->session->userdata('current_url');
+		$user_data	=	new User_data;
 		$my_session	=	array(
 			'current_url'	=>	current_url()
 		);
@@ -49,7 +54,8 @@ class Business_fields extends CI_Controller{
 				anchor($last_url,'Fields','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))),
 			'fields'	=>	$fields,
-			'id'		=>	$this->uri->segment(3)
+			'id'		=>	$this->uri->segment(3),
+			'user_data'	=>	$user_data
 		);
 		$this->load->view('business_fields/edit',$data);
 	}
@@ -65,12 +71,14 @@ class Business_fields extends CI_Controller{
 		redirect('business_fields/index/' . $this->uri->segment(3));
 	}
 	function add(){
+		$user_data=new User_data;
 		$data	=	array(
 			'navigator'	=>	array(array(
 				anchor('/','Home','class="button"'),
 				anchor('business_fields/index/' . $this->uri->segment(3),'Fields','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))),
 			'id'		=>	$this->uri->segment(3),
+			'user_data'	=>	$user_data
 		);
 		$this->load->view('business_fields/add',$data);
 	}

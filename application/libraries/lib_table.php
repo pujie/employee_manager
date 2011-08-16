@@ -1,14 +1,21 @@
 <?php
 class Lib_table{
 var $header;
+var $head;
 	var $column_alignment;
 	function set_head($heads){
 		$list='';
 		foreach($heads as $head){
 			$list.='<th>' . $head . '</th>';
 		}
-		
-		return '<thead class="thead-display"><tr>' . $list . '</tr></thead>';
+		$this->head=$list;
+	}
+	function set_head2($heads){
+	$list='';
+		foreach($heads as $head){
+			$list.='<th colspan=' . $head['colspan'] . '>' . $head['val'] . '</th>';
+		}
+		$this->head=$list;
 	}
 	function set_body($bodies){
 		$tr_array='';
@@ -55,7 +62,17 @@ var $header;
 	function set_alignment($col,$alignment){
 		$this->column_alignment[$col]=$alignment;
 	}
+	function set_multi_alignment($array_of_attributes){
+		foreach($array_of_attributes as $key=>$value){
+			$this->column_alignment[$key]=$value;
+		}
+	}
 	function set_table($table_id,$head,$body){
-		return '<table id=' . $table_id . ' class="table-display">' . $this->set_head($head) . $this->set_body($body) . '</table>';
+		$this->set_head($head);
+		return '<table id=' . $table_id . ' class="table-display">' . '<thead class="thead-display"><tr>' . $this->head . $this->set_body($body) . '</table>';
+	}
+	function set_table2($table_id,$head,$body){
+		$this->set_head2($head);
+		return '<table id=' . $table_id . ' class="table-display">' . '<thead class="thead-display"><tr>' . $this->head . $this->set_body($body) . '</table>';
 	}
 }

@@ -23,11 +23,11 @@ var $authentication;
 			$this->user->set_pagetitle('Branches');
 			$this->user->set_navigator(array(array(
 				anchor('/','Home','class="button"'),
+				anchor('administrator','Administrator','class="button"'),
 				anchor('branches/add','Add Branches','class="button"'),
 				anchor('front_page/index','Logout','class="button"'))));
-			$this->data['user']		=	$this->user;
-			$this->data['branches']	=	$branches;
-			$this->load->view('Branches/index',$this->data);
+			$data=array('user_data'=>$this->user,'branches'=>$branches);
+			$this->load->view('branches/index',$data);
 		}
 	}
 	function add(){
@@ -61,7 +61,7 @@ var $authentication;
 				anchor('/','Home','class="button"'),
 				anchor('branches','Back to Branches','class="button"'),
 				anchor('front_page/index','Logout','class="button"'))));
-			$this->data['user']=$this->user;
+			$this->data['user_data']=$this->user;
 			$this->load->view('branches/edit',$this->data);
 		}
 	}
@@ -86,7 +86,7 @@ var $authentication;
 			$this->user->set_pagetitle('Branch Users');
 			$form_array	=	array(
 				'branch'	=>	$branches,
-				'user'		=>	$this->user,
+				'user_data'		=>	$this->user,
 				'branch_id'	=>	$branch_id
 			);
 			$this->data	=	array_merge($form_array,$this->data);
@@ -138,9 +138,11 @@ var $authentication;
 			foreach($clients as $client){
 				array_push($list,array($client->id,$client->name));
 			}
+			$user_data=new User_data;
 			$data	=	array(
 				'clients'	=>	$list,
-				'navigator'	=>	array(array(anchor('/','Home','class="button"'),anchor('branches','Branches','class="button"'),anchor('front_page/logout','Logout','class="button"')))
+				'navigator'	=>	array(array(anchor('/','Home','class="button"'),anchor('branches','Branches','class="button"'),anchor('front_page/logout','Logout','class="button"'))),
+				'user_data'	=>	$user_data
 			);
 			$this->pagination->initialize(array(
 				'base_url'	=>	base_url() . 'index.php/branches/show_clients/' . $id,

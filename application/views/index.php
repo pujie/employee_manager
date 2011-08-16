@@ -1,12 +1,8 @@
 <?php
-$this->load->view('common/header');
-?>
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".button").button();
-});
-</script>
-<?php
+$header_data=array('username'=>$user_data->get_user());
+$this->load->view('common/header',$header_data);
 echo $title;
-$this->lib_table_manager->create_table($this->user_data->get_navigator());
-$this->load->view('common/footer');
+?>
+<?php
+$data=array('navigator'=>$this->user_data->get_navigator());
+$this->load->view('common/footer',$data);

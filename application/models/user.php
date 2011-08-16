@@ -12,10 +12,12 @@ var $navigator;
 		foreach($this as $user){
 			array_push($list,array($user->id,
 				$user->username,$user->email,
+				anchor('users/show_modules/' . $user->id,'Modules','class="table_button"'),
+				anchor('users/show_branches/' . $user->id,'Branches','class="table_button"'),
 				anchor('users/edit/' . $user->id,'Edit','class="table_button"'),
 				anchor('users/delete/' . $user->id,'Delete','class="table_button"'),
-				anchor('users/show_modules/' . $user->id,'Modules','class="table_button"'),
-				anchor('users/show_branches/' . $user->id,'Branches','class="table_button"')));
+				)
+			);
 		}
 		return $list;
 	}

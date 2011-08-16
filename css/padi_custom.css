@@ -1,4 +1,14 @@
-﻿* {
+﻿#desc{
+	position:absolute;
+	left:10px;
+	top	:10px;
+	color:blue;
+}
+#logo{
+text-align:center;
+background: white;
+}
+* {
 padding: 0;
 margin: 0;
 }
@@ -23,6 +33,15 @@ border-left: 2px solid #666;
 border-right: 2px solid #666;
 width: 100%px;
 margin: 0 auto;
+}
+#navigator{
+width: 100%;
+background-color: #000;
+color: gold;
+text-align: center;
+height: 70px;
+padding-top: 10px;
+margin: -70px auto 0 auto;
 }
 #footer{
 width: 100%;

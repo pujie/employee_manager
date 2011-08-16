@@ -22,5 +22,10 @@
 	
 	<body>
 <!--		<div id="wrapper"> -->
+		<div id='desc'>
+			<?php if(isset($username)) {echo 'User Name: ' . $username . '<br>';} ?>
+			<?php if(isset($row_count)){echo 'Row Count: ' . $row_count . '<br>';} ?>
+		</div>
 		<div id="container">
-			<img src="<?php echo base_url();?>media/logo.jpg" />
+			<div id='logo'>
+			<img src="<?php echo base_url();?>media/logo.jpg" /></div>
