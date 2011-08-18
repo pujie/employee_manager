@@ -10,9 +10,9 @@ var $obj;
 		}
 		else
 		{
-			$this->obj->load->view('front_page/not_loged_in');
+			$footer_data=array('navigator'=>array(array(anchor('front_page/login','Login','class="button"'))));
+			$this->obj->load->view('front_page/not_loged_in',$footer_data);
 			return false;
 		}
-
 	}
 }

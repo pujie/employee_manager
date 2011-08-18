@@ -2,7 +2,6 @@
 class Clients extends CI_Controller{
 var $data;
 var $authentication;
-// var $head=array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
 var $pagination_attributes;
 	function __construct(){
 		parent::__construct();
@@ -11,7 +10,7 @@ var $pagination_attributes;
 		$this->load->model('category');
 		$this->load->model('service');
 		$this->load->library('OLERead');
-		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','EDIT');
+		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','STATUS','EDIT');
 		if($this->simple_auth->is_logged_in()){
 			$this->load->model('user_data');
 			$this->data['username'] = 	$this->session->userdata['username'];
@@ -61,6 +60,7 @@ var $pagination_attributes;
 						$client->branch->name, 
 						$client->category->kategori, 
 						$client->service->layanan,
+						$client->status->name,
 						anchor('clients/edit/' . $client->id . '?last_url=' . current_url(),'Edit','class="table_button"')
 					)
 				);

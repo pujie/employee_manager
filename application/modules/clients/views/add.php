@@ -153,5 +153,5 @@
 	<?php
 	// $this->lib_table_manager->create_table($this->user_data->get_navigator());
 	$footer_data=array('navigator'=>$navigator);
-	$this->load->view('common/footer');
+	$this->load->view('common/footer',$footer_data);
 ?>
