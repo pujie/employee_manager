@@ -5,7 +5,7 @@ var $user;
 	function __construct(){
 		parent::__construct();
 		$this->load->library('lib_raw_menu');
-		$this->data['css']=$this->general->css();
+		//$this->data['css']=$this->general->css();
 		$this->data['menu']=$this->general->create_menu();
 		if($this->simple_auth->is_logged_in($this->session->userdata['id'])){
 			$this->user	=	new User_data();

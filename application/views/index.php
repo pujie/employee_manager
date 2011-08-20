@@ -6,3 +6,4 @@ echo $title;
 <?php
 $data=array('navigator'=>$this->user_data->get_navigator());
 $this->load->view('common/footer',$data);
+

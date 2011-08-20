@@ -12,18 +12,21 @@ class Business_fields extends CI_Controller{
 		$user_data=new User_data;
 		$this->session->set_userdata($my_session);
 		$business_fields	=	new Business_field();
+		$business_fields->get();
+		$row_count=$business_fields->count();
+		$business_fields	=	new Business_field();
 		$business_fields->get(10,$this->uri->segment(3));
 		$list	=	array();
 		foreach($business_fields as $field){
 		array_push($list,array(
 			$field->id,
 			$field->name,
-			anchor('business_fields/edit/' . $field->id,'Edit','class="button"'),
+			anchor('business_fields/edit/' . $this->uri->segment(3) . '/' . $field->id,'Edit','class="button"'),
 			anchor('business_fields/delete/' . $this->uri->segment(3) . '/' . $field->id,'Delete','class="button"')));
 		}
 		$pagination	=	array(
 			'per_page'	=>	10,
-			'total_rows'=>	100,
+			'total_rows'=>	$row_count,
 			'base_url'	=>	base_url() . 'index.php/business_fields/index'
 		);
 		$this->pagination->initialize($pagination);
@@ -46,7 +49,7 @@ class Business_fields extends CI_Controller{
 		);
 		$this->session->set_userdata($my_session);
 		$fields=new Business_field;
-		$fields->where('id',$this->uri->segment(3));
+		$fields->where('id',$this->uri->segment(4));
 		$fields->get();
 		$data	=	array(
 			'navigator'	=>	array(array(
@@ -54,7 +57,8 @@ class Business_fields extends CI_Controller{
 				anchor($last_url,'Fields','class="button"'),
 				anchor('front_page/logout','Logout','class="button"'))),
 			'fields'	=>	$fields,
-			'id'		=>	$this->uri->segment(3),
+			'id'		=>	$this->uri->segment(4),
+			'page'		=>	$this->uri->segment(3),
 			'user_data'	=>	$user_data
 		);
 		$this->load->view('business_fields/edit',$data);

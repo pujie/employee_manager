@@ -81,7 +81,7 @@ class Simple_auth
 	 * @return 	void
 	 */
 	public function log_out($redirect = '')
-	{
+	{echo 'test d';
 		$this->CI->session->sess_destroy();
 		
 		$this->CI->load->helper('url');

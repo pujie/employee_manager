@@ -232,11 +232,4 @@ var $pagination_attributes;
 		$result=$tmp[2] . '-' . $tmp[0] . '-' . $tmp[1];
 		return $result;
 	}
-function test(){
-$this->load->model('client');
-$client=new Client;
-$user=$client->where_related('branch/user','id',3)->get();
-echo $user->count();
-echo $user->check_last_query();
-}
 }

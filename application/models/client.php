@@ -2,8 +2,9 @@
 class Client extends DataMapper{
 var $pagination_attribute;
 		var $has_one = array(
-		'category','service','branch','business_field','status'
+		'category','service','branch','business_field','status','sales'
 	);
+	var $has_many=array('contact');
 	function __construct(){
 		parent::__construct();
 	}

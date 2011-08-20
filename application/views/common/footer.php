@@ -1,7 +1,10 @@
 		</div><!-- container --> 
 <div id='navigator'>
 <?php
+if(isset($navigator)){
 $this->lib_table_manager->create_table($navigator);
+}
+
 ?>
 </div>
 

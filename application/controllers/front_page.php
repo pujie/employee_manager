@@ -13,7 +13,6 @@ class Front_page extends CI_Controller{
 			$this->data['user_data']	=	$this->session->userdata('user_data');
 			$this->data['last_activity']=	$this->session->userdata('last_activity');
 			$this->data['menu'] 		= 	$this->general->create_menu();
-			$this->data['css'] 			= 	$this->general->css();
 			$this->data['userid']		=	$this->session->userdata('id');
 			$this->data['username']		=	$this->session->userdata('username');
 			$this->data['email']		=	$this->session->userdata('email');

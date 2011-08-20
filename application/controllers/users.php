@@ -149,7 +149,7 @@ var $current_url;
 				anchor('/','Home','class="button"'),
 				anchor('users','Back to Users','class="button"'),
 				anchor('users/add_module/' . $id,'Add Modules','class="button"'),
-				anchor('UserManager/logout','Logout','class="button"'))));
+				anchor('front_page/logout','Logout','class="button"'))));
 			$this->user->set_title(humanize($module_user->username) . '\'s modules: ');
 			$form_array	=	array(
 				'module_user'		=>	$module_user,
@@ -237,6 +237,19 @@ var $current_url;
 		$this->load->view('users/add_branch',$this->data);
 		}
 	}
+function add_branch_handler(){
+	$param=$this->input->post();
+	$branch=new Branch;
+	$branch->where('id',$param['id']);
+	$branch->get();
+echo $branch->name;
+	$user=new User;
+	$user->where('id',$this->uri->segment(3));
+	$user->get();
+echo $this->uri->segment(2);
+echo $user->username;
+	$user->save($branch);
+}
 	function delete(){
 		$data	=	array(
 			'id'	=>	$this->uri->segment(3)

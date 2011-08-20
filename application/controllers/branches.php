@@ -8,7 +8,7 @@ var $authentication;
 		parent::__construct();
 		$this->load->model('branch');
 		$this->authentication=new Authentication;
-		$this->data['css']		= $this->general->css();
+		//$this->data['css']		= $this->general->css();
 		$this->data['menu']		= $this->general->create_menu();
 		if($this->simple_auth->is_logged_in()){
 			$this->load->model('user_data');
