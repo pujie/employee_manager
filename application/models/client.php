@@ -2,7 +2,7 @@
 class Client extends DataMapper{
 var $pagination_attribute;
 		var $has_one = array(
-		'category','service','branch','business_field','status','sales'
+		'category','service','branch','business_field','status','sale'
 	);
 	var $has_many=array('contact');
 	function __construct(){
@@ -15,8 +15,8 @@ var $pagination_attribute;
 					$client->kode_pelanggan,
 					$client->name, 
 					$client->branch->name, 
-					$client->category->kategori, 
-					$client->service->LAYANAN,
+					$client->category->name, 
+					$client->service->name,
 					anchor('clients/edit/' . $client->id,'Edit')
 				)
 			);

@@ -79,11 +79,6 @@ font-size:12px;
 	background:black;
 	color:whitesmoke;
 }
-.tableless_label{
-float: left;
-width: 420px;
-font-weight: bold;
-}
 
 .tableless_login_label{
 float: left;
@@ -101,11 +96,35 @@ font-weight: bold;
 .lib_table_body_even{
 	background:cornsilk;
 }
-.tableless_input, .tableless_textarea{
-width: 180px;
-margin-bottom: 5px;
+.tableless_label{
+float: left;
+width: 220px;
+font-weight: bold;
 }
-
+.tableless_input, .tableless_textarea{
+	margin-bottom: 5px;
+}
+.input_person_name{
+	width:480px;
+}
+.input_description{
+	width:500px;
+}
+.input_short{
+	width:300px;
+}
+.input_address{
+	width:600px;
+}
+.input_email{
+	width:300px;
+}
+.input_telp{
+	width:200px;
+}
+.input_ktp{
+	width:300px;
+}
 .tableless_textarea{
 width: 250px;
 height: 150px;
@@ -126,8 +145,13 @@ clear: left;
 }
 .wide .tableless_input{
 	width: 300px;
-}.semi_wide .tableless_input{
+}
+.semi_wide .tableless_input{
 	width: 600px;
-}.extra_wide .tableless_input{
+}
+.extra_wide .tableless_input{
 	width: 900px;
 }
+.radio{
+  width: 29px;
+  }

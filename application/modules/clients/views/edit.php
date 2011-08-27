@@ -22,7 +22,7 @@
 <input type='text' name='telp' value='<?php echo $client->telp?>' class='tableless_input' ><br>
 
 <label for='fax' class='tableless_label'>Fax</label>
-<input type='text' name='fax' value='<?php echo $client->fax?>' class='tableless_input' ><br>
+<input type='text' name='fax' value='<?php echo $client->fax?>' class='class="ui-autocomplete-input ui-widget ui-widget-content ui-corner-left tableless_input' ><br>
 
 <label for='applicant' class='tableless_label'>Applicant</label>
 <input type='text' name='applicant' value='<?php echo $client->applicant?>' class='tableless_input' ><br>
