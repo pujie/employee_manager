@@ -1,6 +1,7 @@
 <?php
 class Clients extends CI_Controller{
 var $data;
+var $ordertype='desc';
 var $authentication;
 var $pagination_attributes;
 	function __construct(){
@@ -13,7 +14,7 @@ var $pagination_attributes;
 		$this->load->library('OLERead');
 		$this->config->load('padi_config');
 		
-		$this->data['head']			=	array('CLIENT CODE','CLIENT NAME','BRANCH','CATEGORY','SERVICE','STATUS','EDIT');
+		$this->data['head']			=	array('KODE',anchor('clients/list_clients/name_order','NAMA PELANGGAN'),'CABANG','KATEGORI','LAYANAN','STATUS','PEMOHON','SALES','ACTION');
 		if($this->simple_auth->is_logged_in()){
 			$this->load->model('user_data');
 			$this->data['username'] = 	$this->session->userdata['username'];
@@ -26,9 +27,102 @@ var $pagination_attributes;
 		}
 		$this->pagination_attributes['base_url'] = base_url() . '/index.php/clients/list_clients/';
 	}
-	
+	function name_order(){
+		
+	}
 	function index(){
-		redirect('clients/list_clients/0');
+		//redirect('clients/list_clients/0');
+		if ($this->authentication->is_authenticated()){
+			$user=new User;
+			$user->where('id',$this->session->userdata['id']);
+			$user->get();
+			$branch=$user->branch->get_iterated();
+			if($this->uri->segment(3)<>null){
+				switch ($this->uri->segment(3)){
+					case 'find':
+						$temp=$branch->client->like('name',$this->uri->segment(4))->
+						or_ilike('applicant',$this->uri->segment(4))->
+						or_ilike_related_service('name',$this->uri->segment(4))->
+						or_ilike_related_category('name',$this->uri->segment(4))->
+						or_ilike_related('sale/user','username',$this->uri->segment(4));
+						$page_amount= $temp->get()->result_count();
+						$pagination=array(
+//						'total_rows'=>$temp->get()->result_count(),
+												'total_rows'=>$page_amount,
+						'uri_segment'=>5,
+						'base_url'=>base_url() . 'index.php/clients/index/find/' . $this->uri->segment(4) . '/',
+						'per_page'=>10);
+						if($this->uri->segment(5)<>null){
+							$page=$this->uri->segment(5);
+						}
+						else{
+							$page=0;
+						}
+						$clients				=	$branch->client->like('name',$this->uri->segment(4))->
+						or_ilike('applicant',$this->uri->segment(4))->
+						or_ilike_related_service('name',$this->uri->segment(4))->
+						or_ilike_related_category('name',$this->uri->segment(4))->
+						or_ilike_related('sale/user','username',$this->uri->segment(4))->get(10,$page);
+					
+						break;
+					case 'name_order':
+						$clients				= 	$branch->client->get_iterated();
+						echo 'name order';
+						break;
+					default:
+						$clients=$branch->client;
+						$pagination=array(
+							'total_rows'=>$clients->count(),
+							'base_url'=>base_url() . 'index.php/clients/index/',
+							'per_page'=>10);
+						$page=$this->uri->segment(3);
+						$clients->get(10,$page);
+				}
+			}else{
+				redirect('clients/index/0');
+			}
+			if($this->uri->segment(3) == null){
+				$page	=	0;
+			}
+				else
+			{	
+				$page	= $this->uri->segment(3);
+			}
+			$body=array();
+			foreach($clients as $client){
+				array_push($body,array(
+						$client->kode_pelanggan,
+						$client->name, 
+						$client->branch->name, 
+						$client->category->name, 
+						$client->service->name,
+						$client->status->name,
+						$client->applicant,
+						$client->sale->user->username,
+						anchor('clients/edit2/' . $page . '/' . $client->id ,'Edit','class="table_button"')
+					)
+				);
+			}
+			$form_array	=	array(
+				'row_count'=>$clients->count(),
+				'body'=>$body,
+				'current_url'=> current_url()
+			);
+			$this->pagination->initialize($pagination);
+//			echo 'total rows' . $pagination['total_rows'] . '<br>';
+//			echo 'total rows' . $pagination['base_url'] . '<br>';
+			$this->user_data->set_title('Clients');
+			$this->user_data->set_navigator(array(array(
+				anchor('/','Home','class="button"'),
+				anchor('clients/add','Add Client','class="button"'),
+				anchor('categories','Categories','class="button"'),
+				anchor('services','Services','class="button"'),
+				anchor('clients/get_excel','Export to Excel','class="button"'),
+				anchor('clients/import','Import from Excel','class="button"'),
+				anchor('front_page/logout','Logout','class="button"'))));
+				$this->data	=	array_merge($form_array,$this->data);
+			$this->load->view('index',$this->data);
+		}
 	}
 	function list_clients(){
 		if($this->authentication->is_authenticated()){
@@ -36,8 +130,12 @@ var $pagination_attributes;
 			$user->where('id',$this->session->userdata['id']);
 			$user->get();
 			$branch					= 	$user->branch->get_iterated();
-			if($this->uri->segment(4)<>null){
-				$clients				=	$branch->client->like('name',$this->uri->segment(4));
+			if($this->uri->segment(3)=='find'){
+				$clients				=	$branch->client->like('name',$this->uri->segment(4))->
+				or_ilike('applicant',$this->uri->segment(4))->
+				or_ilike_related_service('name',$this->uri->segment(4))->
+				or_ilike_related_category('name',$this->uri->segment(4))->
+				or_ilike_related('sale/user','username',$this->uri->segment(4));
 				$pagination_attribute['per_page']	=	10;
 			}
 			else{
@@ -54,6 +152,9 @@ var $pagination_attributes;
 			{	
 				$page	= $this->uri->segment(3);
 			}
+			if($this->uri->segment(3)=='name_order'){
+			$clients->order_by('name','desc');	
+			}
 			$clients->get($per_page,$page);
 			$body=array();
 			foreach($clients as $client){
@@ -64,6 +165,8 @@ var $pagination_attributes;
 						$client->category->name, 
 						$client->service->name,
 						$client->status->name,
+						$client->applicant,
+						$client->sale->user->username,
 						anchor('clients/edit2/' . $page . '/' . $client->id ,'Edit','class="table_button"')
 					)
 				);
@@ -148,10 +251,10 @@ var $pagination_attributes;
 	function find_handler(){
 		$params=$this->input->post();
 		if($params['submit']){
-			redirect('clients/list_clients/find/' . $params['search']);
+			redirect('clients/index/find/' . $params['search']);
 		}
 		if($params['resetsubmit']){
-			redirect('clients/list_clients');
+			redirect('clients/index');
 		}
 	}
 	
