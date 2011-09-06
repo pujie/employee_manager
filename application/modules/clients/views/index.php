@@ -4,6 +4,8 @@ $this->load->view('common/header',$header_data);
 $this->load->view('navigator');
 echo $this->user_data->get_pagetitle();
 $this->lib_table->set_alignment(5,'center');
+$this->lib_table->set_alignment(8,'right');
+$this->lib_table->set_alignment(9,'center');
 echo $this->lib_table->set_table('client',$head,$body);
 echo '<div class=pagination>';
 echo $this->pagination->create_links();
