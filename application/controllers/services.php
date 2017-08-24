@@ -28,6 +28,7 @@ class Services extends CI_Controller{
 		$services->client->get()->order_by('name');
 		echo $services->layanan;
 		$c = 0;
+		$list = array();
 		foreach($services->client->all as $client){
 			$list[$c] = array($client->name);
 			$c++;

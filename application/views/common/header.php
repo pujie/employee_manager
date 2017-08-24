@@ -28,4 +28,4 @@
 		</div>
 		<div id="container">
 			<div id='logo'>
-			<img src="<?php echo base_url();?>media/logo.jpg" /></div>
+			<img src="/media/logo.png" /></div>
